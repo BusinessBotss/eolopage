@@ -4,596 +4,710 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EOLO Marine — Catalogue</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Barlow+Condensed:wght@300;400;500;600;700;800;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#0a1628;--deep:#060e1c;--gold:#c8a96e;--gold-light:#e2c98a;--cream:#f5f0e8;--border:rgba(200,169,110,0.22);}
+:root{--deep:#060e1c;--navy:#0a1628;--gold:#c8a96e;--gold-l:#e2c98a;--cream:#f5f0e8;--border:rgba(200,169,110,0.2);}
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{background:var(--deep);color:var(--cream);font-family:'Barlow',sans-serif;font-weight:300;overflow-x:hidden;cursor:none;}
 
 /* CURSOR */
-.cursor{width:7px;height:7px;background:var(--gold);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
-.cursor-ring{width:38px;height:38px;border:1px solid rgba(200,169,110,0.45);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.18s ease;}
+#cur{width:7px;height:7px;background:var(--gold);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
+#ring{width:36px;height:36px;border:1px solid rgba(200,169,110,0.4);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .18s,height .18s,border-color .18s;}
 
 /* LOADER */
-.loader{position:fixed;inset:0;background:var(--deep);z-index:9997;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:28px;transition:opacity 0.7s ease,visibility 0.7s ease;}
-.loader.hidden{opacity:0;visibility:hidden;}
-.loader-logo-img{width:170px;filter:brightness(0) invert(1);animation:logoPulse 1.5s ease infinite;}
-@keyframes logoPulse{0%,100%{opacity:0.5}50%{opacity:1}}
-.loader-bar{width:220px;height:1px;background:rgba(200,169,110,0.15);position:relative;overflow:hidden;}
-.loader-progress{position:absolute;top:0;left:0;height:100%;background:var(--gold);animation:loadBar 1.8s ease forwards;}
-@keyframes loadBar{from{width:0}to{width:100%}}
-.loader-sub{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:0.4em;color:rgba(200,169,110,0.45);text-transform:uppercase;}
+.loader{position:fixed;inset:0;background:var(--deep);z-index:9997;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:26px;transition:opacity .7s,visibility .7s;}
+.loader.hide{opacity:0;visibility:hidden;}
+.loader img{width:160px;filter:brightness(0) invert(1);animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+.lbar{width:200px;height:1px;background:rgba(200,169,110,.12);}
+.lprog{height:100%;background:var(--gold);animation:lprog 1.9s ease forwards;}
+@keyframes lprog{from{width:0}to{width:100%}}
+.lsub{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:.4em;color:rgba(200,169,110,.4);text-transform:uppercase;}
 
 /* NAV */
-.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:22px 64px;transition:all 0.4s;}
-.navbar.scrolled{background:rgba(6,14,28,0.93);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 64px;}
-.nav-logo img{height:34px;filter:brightness(0) invert(1);}
-.nav-links{display:flex;gap:36px;}
-.nav-link{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:0.15em;color:rgba(245,240,232,0.6);text-decoration:none;text-transform:uppercase;transition:color 0.3s;cursor:none;}
-.nav-link:hover{color:var(--gold);}
-.lang-btns{display:flex;gap:5px;}
-.lang-btn{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:0.1em;padding:5px 12px;border:1px solid var(--border);background:transparent;color:rgba(245,240,232,0.5);cursor:none;transition:all 0.25s;text-transform:uppercase;}
-.lang-btn.active,.lang-btn:hover{background:var(--gold);border-color:var(--gold);color:var(--deep);}
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:20px 60px;transition:all .4s;}
+nav.sc{background:rgba(6,14,28,.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:13px 60px;}
+.nlogo img{height:32px;filter:brightness(0) invert(1);}
+.nlinks{display:flex;gap:34px;}
+.nlink{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:.15em;color:rgba(245,240,232,.55);text-decoration:none;text-transform:uppercase;transition:color .3s;cursor:none;}
+.nlink:hover{color:var(--gold);}
+.lbtns{display:flex;gap:5px;}
+.lbtn{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:.1em;padding:5px 11px;border:1px solid var(--border);background:transparent;color:rgba(245,240,232,.45);cursor:none;transition:all .25s;text-transform:uppercase;}
+.lbtn.on,.lbtn:hover{background:var(--gold);border-color:var(--gold);color:var(--deep);}
 
 /* HERO */
 .hero{height:100vh;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;}
 .hero-bg{position:absolute;inset:0;}
-.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center 35%;animation:heroZoom 14s ease forwards;}
-@keyframes heroZoom{from{transform:scale(1.1)}to{transform:scale(1.0)}}
-.hero-ov1{position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,14,28,0.25) 0%,rgba(6,14,28,0.45) 35%,rgba(6,14,28,0.88) 80%,var(--deep) 100%);}
-.hero-ov2{position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 50% 50%,transparent 30%,rgba(6,14,28,0.55) 100%);}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(200,169,110,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(200,169,110,0.03) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse at center,black 5%,transparent 70%);}
-.hero-content{position:relative;text-align:center;z-index:2;}
-.hero-logo{margin-bottom:28px;opacity:0;animation:fadeUp 1s ease 0.4s forwards;}
-.hero-logo img{height:72px;filter:brightness(0) invert(1);}
-.hero-eyebrow{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:0.4em;color:var(--gold);text-transform:uppercase;margin-bottom:18px;opacity:0;animation:fadeUp 1s ease 0.65s forwards;}
-.hero-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(60px,10vw,148px);font-weight:900;line-height:0.92;letter-spacing:-0.02em;color:#fff;opacity:0;animation:fadeUp 1s ease 0.85s forwards;}
-.hero-title-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(22px,3.5vw,50px);color:var(--gold-light);display:block;margin-top:10px;letter-spacing:0.08em;}
-.hero-rule{width:60px;height:1px;background:var(--gold);margin:26px auto;opacity:0;animation:fadeUp 1s ease 1.05s forwards;}
-.hero-sub{font-size:13px;letter-spacing:0.1em;color:rgba(245,240,232,0.5);opacity:0;animation:fadeUp 1s ease 1.15s forwards;}
-.hero-cta{margin-top:42px;display:flex;gap:14px;justify-content:center;opacity:0;animation:fadeUp 1s ease 1.35s forwards;}
-.btn-gold{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:0.22em;text-transform:uppercase;padding:15px 44px;background:var(--gold);color:var(--deep);border:none;cursor:none;font-weight:700;transition:all 0.3s;}
-.btn-gold:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 12px 40px rgba(200,169,110,0.3);}
-.btn-outline{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:0.22em;text-transform:uppercase;padding:14px 44px;background:transparent;color:var(--cream);border:1px solid rgba(245,240,232,0.28);cursor:none;transition:all 0.3s;text-decoration:none;display:inline-block;}
-.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
-.scroll-cue{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;animation:fadeUp 1s ease 1.65s forwards;cursor:none;}
-.scroll-cue span{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:0.4em;text-transform:uppercase;color:rgba(245,240,232,0.28);}
-.scroll-line{width:1px;height:52px;background:linear-gradient(180deg,var(--gold),transparent);animation:sAnim 2s ease infinite;}
-@keyframes sAnim{0%,100%{opacity:0.25}50%{opacity:1}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center 35%;animation:hzoom 14s ease forwards;}
+@keyframes hzoom{from{transform:scale(1.1)}to{transform:scale(1)}}
+.hov1{position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,14,28,.2) 0%,rgba(6,14,28,.5) 40%,rgba(6,14,28,.9) 82%,var(--deep) 100%);}
+.hov2{position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 50% 50%,transparent 30%,rgba(6,14,28,.5) 100%);}
+.hgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(200,169,110,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(200,169,110,.025) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(ellipse at center,black 5%,transparent 70%);}
+.hc{position:relative;text-align:center;z-index:2;}
+.hlogo{margin-bottom:26px;opacity:0;animation:fu 1s ease .4s forwards;}
+.hlogo img{height:68px;filter:brightness(0) invert(1);}
+.hey{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:.4em;color:var(--gold);text-transform:uppercase;margin-bottom:16px;opacity:0;animation:fu 1s ease .65s forwards;}
+.htitle{font-family:'Barlow Condensed',sans-serif;font-size:clamp(60px,10vw,148px);font-weight:900;line-height:.92;letter-spacing:-.02em;color:#fff;opacity:0;animation:fu 1s ease .85s forwards;}
+.htitlesub{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(22px,3.5vw,50px);color:var(--gold-l);display:block;margin-top:10px;letter-spacing:.08em;}
+.hrule{width:58px;height:1px;background:var(--gold);margin:24px auto;opacity:0;animation:fu 1s ease 1.05s forwards;}
+.hsub{font-size:13px;letter-spacing:.1em;color:rgba(245,240,232,.48);opacity:0;animation:fu 1s ease 1.15s forwards;}
+.hcta{margin-top:40px;display:flex;gap:13px;justify-content:center;opacity:0;animation:fu 1s ease 1.35s forwards;}
+.btn-g{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:.22em;text-transform:uppercase;padding:14px 42px;background:var(--gold);color:var(--deep);border:none;cursor:none;font-weight:700;transition:all .3s;}
+.btn-g:hover{background:var(--gold-l);transform:translateY(-2px);box-shadow:0 12px 40px rgba(200,169,110,.28);}
+.btn-o{font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:.22em;text-transform:uppercase;padding:13px 42px;background:transparent;color:var(--cream);border:1px solid rgba(245,240,232,.25);cursor:none;transition:all .3s;text-decoration:none;display:inline-block;}
+.btn-o:hover{border-color:var(--gold);color:var(--gold);}
+.scue{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:9px;opacity:0;animation:fu 1s ease 1.65s forwards;cursor:none;}
+.scue span{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:rgba(245,240,232,.26);}
+.sline{width:1px;height:50px;background:linear-gradient(180deg,var(--gold),transparent);animation:sa 2s ease infinite;}
+@keyframes sa{0%,100%{opacity:.22}50%{opacity:1}}
+@keyframes fu{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
 
-/* DIVIDER */
-.sdiv{display:flex;align-items:center;gap:20px;padding:0 64px;margin:88px 0 52px;}
-.sdiv-line{flex:1;height:1px;background:var(--border);}
-.sdiv-diamond{width:6px;height:6px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;}
-.sdiv-text{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:0.45em;color:var(--gold);text-transform:uppercase;white-space:nowrap;}
+/* DIVIDERS */
+.div{display:flex;align-items:center;gap:18px;padding:0 60px;margin:80px 0 48px;}
+.div-l{flex:1;height:1px;background:var(--border);}
+.div-d{width:6px;height:6px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;}
+.div-t{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:.45em;color:var(--gold);text-transform:uppercase;white-space:nowrap;}
 
 /* HISTORY */
-.history{max-width:1380px;margin:0 auto;padding:60px 64px 110px;display:grid;grid-template-columns:1fr 1fr;gap:96px;align-items:center;}
-.hist-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:0.4em;color:var(--gold);text-transform:uppercase;margin-bottom:18px;}
-.hist-heading{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,3.8vw,58px);font-weight:300;line-height:1.1;color:#fff;margin-bottom:26px;}
-.hist-heading em{font-style:italic;color:var(--gold);}
-.hist-body{font-size:14px;line-height:1.95;color:rgba(245,240,232,0.58);margin-bottom:16px;}
-.hist-stats{display:flex;gap:42px;margin-top:46px;padding-top:34px;border-top:1px solid var(--border);}
-.sn{font-family:'Barlow Condensed',sans-serif;font-size:46px;font-weight:700;color:var(--gold);line-height:1;display:block;}
-.sl{font-size:9px;letter-spacing:0.15em;color:rgba(245,240,232,0.38);text-transform:uppercase;display:block;margin-top:5px;}
-/* history images */
-.hist-imgs{position:relative;height:570px;}
-.hist-yr{position:absolute;top:-55px;left:-25px;font-family:'Barlow Condensed',sans-serif;font-size:210px;font-weight:900;color:rgba(200,169,110,0.04);line-height:1;user-select:none;letter-spacing:-0.04em;pointer-events:none;}
-.hist-main{position:absolute;right:0;top:0;width:86%;height:450px;overflow:hidden;}
-.hist-main img{width:100%;height:100%;object-fit:cover;transition:transform 8s ease;}
-.hist-main:hover img{transform:scale(1.05);}
-.hist-main::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(200,169,110,0.06),transparent 55%);}
-.hist-accent{position:absolute;left:0;bottom:0;width:50%;height:252px;overflow:hidden;border:1px solid var(--border);}
-.hist-accent img{width:100%;height:100%;object-fit:cover;transition:transform 8s ease;}
-.hist-accent:hover img{transform:scale(1.06);}
-.hist-accent::after{content:'';position:absolute;inset:0;background:rgba(6,14,28,0.18);}
-.img-cap{position:absolute;bottom:11px;left:13px;font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:0.25em;color:rgba(245,240,232,0.4);z-index:2;text-transform:uppercase;}
+.hist{max-width:1360px;margin:0 auto;padding:50px 60px 100px;display:grid;grid-template-columns:1fr 1fr;gap:90px;align-items:center;}
+.hl{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:.4em;color:var(--gold);text-transform:uppercase;margin-bottom:16px;}
+.hh{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,3.8vw,56px);font-weight:300;line-height:1.1;color:#fff;margin-bottom:24px;}
+.hh em{font-style:italic;color:var(--gold);}
+.hb{font-size:14px;line-height:1.95;color:rgba(245,240,232,.56);margin-bottom:14px;}
+.hstats{display:flex;gap:40px;margin-top:44px;padding-top:32px;border-top:1px solid var(--border);}
+.sn{font-family:'Barlow Condensed',sans-serif;font-size:44px;font-weight:700;color:var(--gold);line-height:1;display:block;}
+.sl{font-size:9px;letter-spacing:.14em;color:rgba(245,240,232,.36);text-transform:uppercase;display:block;margin-top:4px;}
+/* hist images */
+.himgs{position:relative;height:560px;}
+.hyr{position:absolute;top:-50px;left:-20px;font-family:'Barlow Condensed',sans-serif;font-size:200px;font-weight:900;color:rgba(200,169,110,.04);line-height:1;user-select:none;pointer-events:none;letter-spacing:-.04em;}
+.hmain{position:absolute;right:0;top:0;width:85%;height:440px;overflow:hidden;}
+.hmain img{width:100%;height:100%;object-fit:cover;transition:transform 8s ease;}
+.hmain:hover img{transform:scale(1.05);}
+.hmain::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(200,169,110,.06),transparent 55%);}
+.hacc{position:absolute;left:0;bottom:0;width:50%;height:244px;overflow:hidden;border:1px solid var(--border);}
+.hacc img{width:100%;height:100%;object-fit:cover;}
+.icap{position:absolute;bottom:10px;left:12px;font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:.24em;color:rgba(245,240,232,.38);z-index:2;text-transform:uppercase;}
 
-/* FLEET */
-.fleet-hdr{padding:0 64px;margin-bottom:52px;display:flex;justify-content:space-between;align-items:flex-end;}
-.fleet-ey{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:0.45em;color:var(--gold);text-transform:uppercase;margin-bottom:12px;}
-.fleet-ttl{font-family:'Barlow Condensed',sans-serif;font-size:clamp(52px,8vw,100px);font-weight:900;line-height:0.9;color:#fff;letter-spacing:-0.02em;}
-.fleet-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(20px,2.8vw,36px);color:var(--gold);display:block;margin-top:8px;}
-.fleet-desc-txt{max-width:310px;font-size:13px;line-height:1.8;color:rgba(245,240,232,0.4);text-align:right;}
-.pills{display:flex;gap:4px;padding:0 64px 46px;flex-wrap:wrap;}
-.pill{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:0.12em;padding:8px 20px;border:1px solid rgba(200,169,110,0.12);color:rgba(245,240,232,0.32);text-transform:uppercase;cursor:none;transition:all 0.3s;}
-.pill.active,.pill:hover{border-color:var(--gold);color:var(--gold);background:rgba(200,169,110,0.05);}
+/* ── LIFESTYLE BANNER ── */
+.lifestyle{display:grid;grid-template-columns:1fr 1fr;height:420px;overflow:hidden;position:relative;}
+.ls-img{overflow:hidden;position:relative;}
+.ls-img img{width:100%;height:100%;object-fit:cover;transition:transform 8s ease;}
+.ls-img:hover img{transform:scale(1.04);}
+.ls-img::after{content:'';position:absolute;inset:0;background:rgba(6,14,28,.32);}
+.ls-caption{position:absolute;bottom:0;left:0;right:0;padding:28px 36px;z-index:2;background:linear-gradient(transparent,rgba(6,14,28,.85));}
+.ls-cap-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;color:#fff;}
 
-/* BOAT CARD */
+/* ── FLEET ── */
+.fhdr{padding:0 60px;margin-bottom:46px;display:flex;justify-content:space-between;align-items:flex-end;}
+.fey{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:.45em;color:var(--gold);text-transform:uppercase;margin-bottom:11px;}
+.fttl{font-family:'Barlow Condensed',sans-serif;font-size:clamp(50px,8vw,98px);font-weight:900;line-height:.9;color:#fff;letter-spacing:-.02em;}
+.fsub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(18px,2.6vw,34px);color:var(--gold);display:block;margin-top:8px;}
+.fdes{max-width:300px;font-size:13px;line-height:1.8;color:rgba(245,240,232,.38);text-align:right;}
+.pills{display:flex;gap:4px;padding:0 60px 42px;flex-wrap:wrap;}
+.pill{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:.12em;padding:7px 18px;border:1px solid rgba(200,169,110,.1);color:rgba(245,240,232,.3);text-transform:uppercase;cursor:none;transition:all .3s;}
+.pill.on,.pill:hover{border-color:var(--gold);color:var(--gold);background:rgba(200,169,110,.05);}
+
+/* BOAT CARD — full-screen hero image + overlay panel */
 .fleet-wrap{overflow:hidden;}
-.fleet-track{display:flex;transition:transform 0.65s cubic-bezier(0.25,0.46,0.45,0.94);}
-.boat-card{min-width:100vw;min-height:82vh;display:flex;align-items:stretch;}
-/* Visual */
-.bv{width:52%;position:relative;overflow:hidden;}
-.bv-bg{position:absolute;inset:0;}
-.bv-bg img.bgimg{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform 0.9s ease;filter:brightness(0.5);}
-.boat-card:hover .bv-bg img.bgimg{transform:scale(1.05);}
-.bv-ov{position:absolute;inset:0;background:linear-gradient(90deg,transparent 35%,rgba(6,14,28,0.92) 100%);}
-.bv-png{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:40px 50px;z-index:2;}
-.bv-png img{max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 24px 64px rgba(0,0,0,0.75)) drop-shadow(0 0 40px rgba(200,169,110,0.12));animation:boatFloat 7s ease-in-out infinite;}
-@keyframes boatFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-.bv-num{position:absolute;top:30px;left:30px;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:0.3em;color:rgba(245,240,232,0.3);z-index:3;}
-.bv-len{position:absolute;bottom:28px;left:30px;z-index:3;font-family:'Barlow Condensed',sans-serif;font-size:56px;font-weight:900;color:rgba(255,255,255,0.06);line-height:1;letter-spacing:-0.03em;}
-/* Info */
-.bi{width:48%;padding:52px 60px 52px 50px;display:flex;flex-direction:column;justify-content:center;background:var(--navy);position:relative;overflow:hidden;}
-.bi::before{content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:linear-gradient(180deg,transparent,var(--gold) 25%,var(--gold) 75%,transparent);}
-.bi-bgtxt{position:absolute;right:-12px;bottom:-8px;font-family:'Barlow Condensed',sans-serif;font-size:150px;font-weight:900;color:rgba(255,255,255,0.02);line-height:1;white-space:nowrap;user-select:none;letter-spacing:-0.04em;}
-.btag{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:0.4em;color:var(--gold);text-transform:uppercase;margin-bottom:12px;}
-.bname{font-family:'Barlow Condensed',sans-serif;font-size:clamp(40px,4.5vw,66px);font-weight:900;line-height:0.95;color:#fff;letter-spacing:-0.02em;margin-bottom:18px;}
-.bdesc{font-size:13px;line-height:1.85;color:rgba(245,240,232,0.56);margin-bottom:28px;max-width:360px;}
-/* specs */
-.bspecs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:20px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:24px;}
-.sv{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:700;color:var(--gold);line-height:1;display:block;}
-.sk{font-size:9px;letter-spacing:0.14em;color:rgba(245,240,232,0.33);text-transform:uppercase;display:block;margin-top:4px;}
-/* accordion */
-.acc{margin-bottom:26px;}
-.ag{border-bottom:1px solid rgba(200,169,110,0.1);}
-.ah{display:flex;justify-content:space-between;align-items:center;padding:11px 0;cursor:none;transition:color 0.2s;}
-.ah:hover .at{color:var(--gold);}
-.at{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(245,240,232,0.55);transition:color 0.2s;}
-.ai{color:var(--gold);font-size:13px;transition:transform 0.3s;line-height:1;}
-.ai.open{transform:rotate(45deg);}
-.ab{max-height:0;overflow:hidden;transition:max-height 0.4s ease;}
-.ab.open{max-height:280px;}
-.ab-inner{padding-bottom:12px;display:flex;flex-wrap:wrap;gap:5px;}
-.chip{font-size:11px;padding:4px 11px;background:rgba(200,169,110,0.07);border:1px solid rgba(200,169,110,0.17);color:rgba(245,240,232,0.62);}
-/* fleet nav */
-.fnav{display:flex;align-items:center;justify-content:center;gap:18px;padding:34px;}
-.fnbtn{width:44px;height:44px;border:1px solid var(--border);background:transparent;color:var(--cream);cursor:none;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all 0.3s;}
-.fnbtn:hover{background:var(--gold);border-color:var(--gold);color:var(--deep);}
-.fdots{display:flex;gap:8px;align-items:center;}
-.fdot{width:5px;height:5px;background:rgba(200,169,110,0.2);border-radius:50%;transition:all 0.3s;cursor:none;}
-.fdot.active{width:20px;border-radius:3px;background:var(--gold);}
+.fleet-track{display:flex;transition:transform .65s cubic-bezier(.25,.46,.45,.94);}
+.bcard{min-width:100vw;height:86vh;position:relative;display:flex;align-items:flex-end;}
 
-/* CATALOG */
-.catsec{padding:110px 64px;background:linear-gradient(180deg,var(--deep) 0%,#0a1830 50%,var(--deep) 100%);}
-.cat-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:90px;align-items:center;}
-.cat-ey{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:0.45em;color:var(--gold);text-transform:uppercase;margin-bottom:18px;}
-.cat-ttl{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,4.5vw,56px);font-weight:300;line-height:1.1;color:#fff;margin-bottom:18px;}
-.cat-ttl strong{font-weight:600;font-style:italic;color:var(--gold);}
-.cat-desc-txt{font-size:13px;line-height:1.9;color:rgba(245,240,232,0.48);margin-bottom:30px;}
-.cat-feats{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:30px;}
-.cf{display:flex;align-items:center;gap:9px;}
-.cf-dot{width:4px;height:4px;background:var(--gold);border-radius:50%;flex-shrink:0;}
-.cf-txt{font-size:12px;color:rgba(245,240,232,0.45);}
+/* bg image fills whole card */
+.bcbg{position:absolute;inset:0;}
+.bcbg img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .9s ease;filter:brightness(.55);}
+.bcard:hover .bcbg img{transform:scale(1.03);}
+
+/* gradient overlays */
+.bcov1{position:absolute;inset:0;background:linear-gradient(180deg,transparent 20%,rgba(6,14,28,.4) 55%,rgba(6,14,28,.96) 100%);}
+.bcov2{position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,14,28,.0) 40%,rgba(6,14,28,.45) 100%);}
+
+/* model number top-left */
+.bcnum{position:absolute;top:32px;left:44px;font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:.3em;color:rgba(245,240,232,.3);z-index:3;}
+
+/* bottom info panel */
+.bcpanel{position:relative;z-index:4;padding:0 60px 52px;display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:end;width:100%;}
+
+/* left: name + specs */
+.bcl{}
+.bctag{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:.4em;color:var(--gold);text-transform:uppercase;margin-bottom:10px;}
+.bcname{font-family:'Barlow Condensed',sans-serif;font-size:clamp(52px,6vw,88px);font-weight:900;line-height:.92;color:#fff;letter-spacing:-.02em;margin-bottom:20px;}
+.bcspecs{display:flex;gap:36px;padding-top:16px;border-top:1px solid rgba(200,169,110,.18);}
+.bcsv{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:700;color:var(--gold);line-height:1;display:block;}
+.bcsk{font-size:9px;letter-spacing:.13em;color:rgba(245,240,232,.32);text-transform:uppercase;display:block;margin-top:3px;}
+
+/* right: description + accordion + QR */
+.bcr{display:flex;flex-direction:column;gap:16px;max-width:460px;margin-left:auto;}
+.bcdesc{font-size:13px;line-height:1.85;color:rgba(245,240,232,.62);border-left:2px solid var(--gold);padding-left:16px;}
+
+/* accordion */
+.acc{display:flex;flex-direction:column;gap:0;}
+.ag{border-bottom:1px solid rgba(200,169,110,.1);}
+.ah{display:flex;justify-content:space-between;align-items:center;padding:10px 0;cursor:none;}
+.ah:hover .at{color:var(--gold);}
+.at{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(245,240,232,.5);transition:color .2s;}
+.ai{color:var(--gold);font-size:13px;transition:transform .3s;line-height:1;}
+.ai.op{transform:rotate(45deg);}
+.ab{max-height:0;overflow:hidden;transition:max-height .4s ease;}
+.ab.op{max-height:260px;}
+.abi{padding-bottom:10px;display:flex;flex-wrap:wrap;gap:4px;}
+.chip{font-size:10px;padding:3px 10px;background:rgba(200,169,110,.07);border:1px solid rgba(200,169,110,.16);color:rgba(245,240,232,.6);}
+
+/* QR */
+.qrb{display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(200,169,110,.05);border:1px solid var(--border);}
+.qrw{flex-shrink:0;width:56px;height:56px;background:white;display:flex;align-items:center;justify-content:center;}
+.ql{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:.32em;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:3px;}
+.qd{font-size:10px;color:rgba(245,240,232,.38);line-height:1.4;}
+
+/* Fleet nav */
+.fnav{display:flex;align-items:center;justify-content:center;gap:16px;padding:30px;}
+.fnb{width:42px;height:42px;border:1px solid var(--border);background:transparent;color:var(--cream);cursor:none;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .3s;}
+.fnb:hover{background:var(--gold);border-color:var(--gold);color:var(--deep);}
+.fdots{display:flex;gap:7px;align-items:center;}
+.fd{width:5px;height:5px;background:rgba(200,169,110,.2);border-radius:50%;transition:all .3s;cursor:none;}
+.fd.on{width:20px;border-radius:3px;background:var(--gold);}
+
+/* CATALOGUE */
+.catsec{padding:100px 60px;background:linear-gradient(180deg,var(--deep) 0%,#0a1830 50%,var(--deep) 100%);}
+.catinner{max-width:1060px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.catey{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:.45em;color:var(--gold);text-transform:uppercase;margin-bottom:16px;}
+.cattl{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,4.5vw,54px);font-weight:300;line-height:1.1;color:#fff;margin-bottom:16px;}
+.cattl strong{font-weight:600;font-style:italic;color:var(--gold);}
+.catdesc{font-size:13px;line-height:1.9;color:rgba(245,240,232,.46);margin-bottom:26px;}
+.catfs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px;}
+.cf{display:flex;align-items:center;gap:8px;}
+.cfd{width:4px;height:4px;background:var(--gold);border-radius:50%;}
+.cft{font-size:12px;color:rgba(245,240,232,.42);}
+.catr{display:flex;flex-direction:column;align-items:center;gap:20px;}
+.bqw{background:white;padding:13px;width:160px;height:160px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 50px rgba(200,169,110,.1);}
+.bql{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:.28em;color:rgba(245,240,232,.35);text-transform:uppercase;}
 
 /* FOOTER */
-footer{background:#030a14;border-top:1px solid var(--border);padding:76px 64px 38px;}
-.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr;gap:76px;margin-bottom:52px;}
-.fl-logo{height:36px;filter:brightness(0) invert(1);opacity:0.6;margin-bottom:14px;display:block;}
-.fl-tag{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:rgba(245,240,232,0.28);margin-bottom:26px;}
-.fl-contacts{display:flex;flex-direction:column;gap:9px;}
-.flc{font-size:12px;color:rgba(245,240,232,0.38);display:flex;align-items:center;gap:9px;}
-.flc-i{color:var(--gold);font-size:12px;}
-.fcol-ttl{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:0.4em;color:var(--gold);text-transform:uppercase;margin-bottom:18px;}
-.fl-links{display:flex;flex-direction:column;gap:11px;}
-.fl-lnk{font-size:12px;color:rgba(245,240,232,0.38);text-decoration:none;cursor:none;transition:color 0.2s;}
-.fl-lnk:hover{color:var(--cream);}
-.footer-btm{padding-top:26px;border-top:1px solid rgba(200,169,110,0.07);display:flex;justify-content:space-between;align-items:center;}
-.fcopy{font-size:11px;color:rgba(245,240,232,0.18);}
-.fmade{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:0.25em;color:rgba(200,169,110,0.32);text-transform:uppercase;}
+footer{background:#030a14;border-top:1px solid var(--border);padding:70px 60px 36px;}
+.ftop{display:grid;grid-template-columns:2fr 1fr 1fr;gap:70px;margin-bottom:48px;}
+.flogo{height:32px;filter:brightness(0) invert(1);opacity:.58;margin-bottom:13px;display:block;}
+.ftag{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:rgba(245,240,232,.26);margin-bottom:22px;}
+.fcts{display:flex;flex-direction:column;gap:8px;}
+.fct{font-size:12px;color:rgba(245,240,232,.35);display:flex;align-items:center;gap:8px;}
+.fci{color:var(--gold);}
+.fcttl{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:.4em;color:var(--gold);text-transform:uppercase;margin-bottom:16px;}
+.fls{display:flex;flex-direction:column;gap:10px;}
+.fl{font-size:12px;color:rgba(245,240,232,.35);text-decoration:none;cursor:none;transition:color .2s;}
+.fl:hover{color:var(--cream);}
+.fbtm{padding-top:24px;border-top:1px solid rgba(200,169,110,.07);display:flex;justify-content:space-between;align-items:center;}
+.fcp{font-size:11px;color:rgba(245,240,232,.16);}
+.fmi{font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:.25em;color:rgba(200,169,110,.3);text-transform:uppercase;}
 
-/* Reveal */
-.reveal{opacity:0;transform:translateY(26px);transition:opacity 0.75s ease,transform 0.75s ease;}
-.reveal.visible{opacity:1;transform:translateY(0);}
-.rd{transition-delay:0.15s;}
-.rd2{transition-delay:0.3s;}
+/* reveal */
+.rv{opacity:0;transform:translateY(24px);transition:opacity .75s ease,transform .75s ease;}
+.rv.vis{opacity:1;transform:translateY(0);}
+.rd{transition-delay:.15s;}
 
+/* responsive */
 @media(max-width:900px){
-  .navbar{padding:16px 22px;}.navbar.scrolled{padding:12px 22px;}
-  .nav-links{display:none;}
-  .history{grid-template-columns:1fr;padding:50px 22px;gap:44px;}
-  .hist-imgs{height:300px;}
-  .fleet-hdr{padding:0 22px;flex-direction:column;align-items:flex-start;gap:18px;}
-  .fleet-desc-txt{text-align:left;max-width:100%;}
-  .pills{padding:0 22px 34px;}
-  .boat-card{flex-direction:column;min-height:auto;}
-  .bv{width:100%;height:52vw;}
-  .bi{width:100%;padding:34px 22px;}
-  .sdiv{padding:0 22px;}
-  .catsec{padding:80px 22px;}
-  .cat-inner{grid-template-columns:1fr;gap:48px;}
-  footer{padding:56px 22px 34px;}
-  .footer-top{grid-template-columns:1fr;gap:34px;}
+  nav,nav.sc{padding:14px 20px;}
+  .nlinks{display:none;}
+  .hist{grid-template-columns:1fr;padding:46px 20px;gap:40px;}
+  .himgs{height:280px;}
+  .lifestyle{grid-template-columns:1fr;height:auto;}
+  .ls-img{height:240px;}
+  .fhdr{padding:0 20px;flex-direction:column;align-items:flex-start;gap:16px;}
+  .fdes{text-align:left;max-width:100%;}
+  .pills{padding:0 20px 30px;}
+  .bcard{height:auto;min-height:100vh;flex-direction:column;}
+  .bcpanel{grid-template-columns:1fr;padding:0 20px 40px;gap:24px;}
+  .bcr{margin-left:0;max-width:100%;}
+  .div{padding:0 20px;}
+  .catsec{padding:80px 20px;}
+  .catinner{grid-template-columns:1fr;gap:44px;}
+  footer{padding:52px 20px 32px;}
+  .ftop{grid-template-columns:1fr;gap:30px;}
 }
 </style>
 </head>
 <body>
 
-<!-- LOADER -->
 <div class="loader" id="loader">
-  <img class="loader-logo-img" src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771722252/Eolo_Logo-nero-e1729522648126_kxdau5.png" alt="EOLO">
-  <div class="loader-bar"><div class="loader-progress"></div></div>
-  <div class="loader-sub" data-i18n="loading">Loading Experience</div>
+  <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCADcAlgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD8qqKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAP/2Q==" alt="EOLO">
+  <div class="lbar"><div class="lprog"></div></div>
+  <div class="lsub" data-i18n="loading">Loading</div>
 </div>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+<div id="cur"></div>
+<div id="ring"></div>
 
 <!-- NAV -->
-<nav class="navbar" id="navbar">
-  <a href="#" class="nav-logo"><img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771722252/Eolo_Logo-nero-e1729522648126_kxdau5.png" alt="EOLO Marine"></a>
-  <div class="nav-links">
-    <a href="#storia" class="nav-link" data-i18n="nav_history">Historia</a>
-    <a href="#flotta" class="nav-link" data-i18n="nav_fleet">Flota</a>
-    <a href="#catalogo" class="nav-link" data-i18n="nav_catalog">Catálogo</a>
-    <a href="#contatti" class="nav-link" data-i18n="nav_contact">Contacto</a>
+<nav id="nav">
+  <a href="#" class="nlogo"><img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCADcAlgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD8qqKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAP/2Q==" alt="EOLO Marine"></a>
+  <div class="nlinks">
+    <a href="#storia" class="nlink" data-i18n="nav_history">Historia</a>
+    <a href="#flotta" class="nlink" data-i18n="nav_fleet">Flota</a>
+    <a href="#catalogo" class="nlink" data-i18n="nav_catalog">Catálogo</a>
+    <a href="#contatti" class="nlink" data-i18n="nav_contact">Contacto</a>
   </div>
-  <div class="lang-btns">
-    <button class="lang-btn active" onclick="setLang('es')">ES</button>
-    <button class="lang-btn" onclick="setLang('en')">EN</button>
-    <button class="lang-btn" onclick="setLang('it')">IT</button>
-    <button class="lang-btn" onclick="setLang('de')">DE</button>
-    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  <div class="lbtns">
+    <button class="lbtn on" onclick="setLang('es')">ES</button>
+    <button class="lbtn" onclick="setLang('en')">EN</button>
+    <button class="lbtn" onclick="setLang('it')">IT</button>
+    <button class="lbtn" onclick="setLang('de')">DE</button>
+    <button class="lbtn" onclick="setLang('fr')">FR</button>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-bg">
-    <img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771721997/ChatGPT_Image_Feb_19_2026_at_04_02_56_PM_vhaqvw.png" alt="Eolo Nove" id="heroBg">
+    <img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771799435/Foto-per-sito-1200x600-px-01-1_bqyyy5.jpg" id="heroBg" alt="EOLO Marine">
   </div>
-  <div class="hero-ov1"></div><div class="hero-ov2"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-content">
-    <div class="hero-logo"><img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771722252/Eolo_Logo-nero-e1729522648126_kxdau5.png" alt="EOLO"></div>
-    <div class="hero-eyebrow" data-i18n="hero_eyebrow">47 años · Made in Italy · Familia Fortunato</div>
-    <div class="hero-title">MARINE<br><span class="hero-title-sub" data-i18n="hero_italic">Excellence & Passion</span></div>
-    <div class="hero-rule"></div>
-    <div class="hero-sub" data-i18n="hero_sub">Astillero Italiano · Calidad Artesanal · Pasión por el Mar</div>
-    <div class="hero-cta">
-      <button class="btn-gold" onclick="document.getElementById('flotta').scrollIntoView({behavior:'smooth'})" data-i18n="hero_btn_fleet">Explorar Flota</button>
-      <a href="#catalogo" class="btn-outline" data-i18n="hero_btn_catalog">Catálogo PDF</a>
+  <div class="hov1"></div><div class="hov2"></div><div class="hgrid"></div>
+  <div class="hc">
+    <div class="hlogo"><img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCADcAlgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD8qqKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAP/2Q==" alt="EOLO"></div>
+    <div class="hey" data-i18n="hero_ey">47 años · Made in Italy · Familia Fortunato</div>
+    <div class="htitle">MARINE<br><span class="htitlesub" data-i18n="hero_it">Excellence & Passion</span></div>
+    <div class="hrule"></div>
+    <div class="hsub" data-i18n="hero_sub">Astillero Italiano · Calidad Artesanal · Pasión por el Mar</div>
+    <div class="hcta">
+      <button class="btn-g" onclick="document.getElementById('flotta').scrollIntoView({behavior:'smooth'})" data-i18n="hero_f">Explorar Flota</button>
+      <a href="#catalogo" class="btn-o" data-i18n="hero_c">Catálogo PDF</a>
     </div>
   </div>
-  <div class="scroll-cue"><span data-i18n="scroll_hint">Scroll</span><div class="scroll-line"></div></div>
+  <div class="scue"><span data-i18n="scroll">Scroll</span><div class="sline"></div></div>
 </section>
 
 <!-- HISTORY -->
 <section id="storia" style="background:var(--deep);overflow:hidden;">
-  <div class="sdiv reveal"><div class="sdiv-line"></div><div class="sdiv-diamond"></div><div class="sdiv-text" data-i18n="div_story">Nuestra Historia</div><div class="sdiv-diamond"></div><div class="sdiv-line"></div></div>
-  <div class="history">
-    <div class="reveal">
-      <div class="hist-label" data-i18n="hist_label">Astillero Italiano · Desde 1977</div>
-      <h2 class="hist-heading" data-i18n="hist_heading">La historia de quienes<br><em>aman el mar</em></h2>
-      <p class="hist-body" data-i18n="hist_body1">Quien ama el mar sabe que debe tener dos cualidades esenciales: tenacidad y perseverancia. Porque el mar puede cambiar cada minuto y los vientos no siempre son favorables.</p>
-      <p class="hist-body" data-i18n="hist_body2">El astillero Eolo lleva años luchando por mantener la alta calidad de sus embarcaciones y la fórmula 100% Made in Italy. Tras 47 años de actividad, la familia Fortunato ha demostrado que es necesario apuntar a estándares cada vez más altos de calidad, profesionalismo e innovación.</p>
-      <div class="hist-stats">
-        <div><span class="sn">47</span><span class="sl" data-i18n="stat_years">Años</span></div>
-        <div><span class="sn">6</span><span class="sl" data-i18n="stat_models">Modelos</span></div>
-        <div><span class="sn">100%</span><span class="sl" data-i18n="stat_made">Made in Italy</span></div>
+  <div class="div rv"><div class="div-l"></div><div class="div-d"></div><div class="div-t" data-i18n="d_hist">Nuestra Historia</div><div class="div-d"></div><div class="div-l"></div></div>
+  <div class="hist">
+    <div class="rv">
+      <div class="hl" data-i18n="hl">Astillero Italiano · Desde 1977</div>
+      <h2 class="hh" data-i18n="hh">La historia de quienes<br><em>aman el mar</em></h2>
+      <p class="hb" data-i18n="hb1">Quien ama el mar sabe que debe tener dos cualidades esenciales: tenacidad y perseverancia. Porque el mar puede cambiar cada minuto y los vientos no siempre son favorables.</p>
+      <p class="hb" data-i18n="hb2">El astillero Eolo lleva años luchando por mantener la alta calidad de sus embarcaciones y la fórmula 100% Made in Italy. Tras 47 años de actividad, la familia Fortunato ha demostrado que es necesario apuntar a estándares cada vez más altos de calidad, profesionalismo e innovación.</p>
+      <div class="hstats">
+        <div><span class="sn">47</span><span class="sl" data-i18n="sy">Años</span></div>
+        <div><span class="sn">6</span><span class="sl" data-i18n="sm">Modelos</span></div>
+        <div><span class="sn">100%</span><span class="sl">Made in Italy</span></div>
       </div>
     </div>
-    <div class="hist-imgs reveal rd">
-      <div class="hist-yr">47</div>
-      <div class="hist-main">
-        <img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771722282/1ok_bbloqa.jpg" alt="EOLO Shipyard">
-        <div class="img-cap">EOLO Marine · Italia</div>
+    <div class="himgs rv rd">
+      <div class="hyr">47</div>
+      <div class="hmain">
+        <img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771799248/Foto-per-sito-1200x600-px-09-1_lvdifs.jpg" alt="EOLO Marine">
+        <div class="icap">EOLO Marine · Italia</div>
       </div>
-      <div class="hist-accent">
-        <img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771722186/IMG_6051-scaled_clpj8g.jpg" alt="EOLO Detail">
-        <div class="img-cap">Detalle · Made in Italy</div>
+      <div class="hacc">
+        <img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771799433/eolo-plovilo-dolasku-5-mjesec-2026-slika-264193627_xzhbvk.jpg" alt="EOLO Detail">
+        <div class="icap">47 Anni · Made in Italy</div>
       </div>
     </div>
   </div>
 </section>
+
+<!-- LIFESTYLE BANNER -->
+<div class="lifestyle">
+  <div class="ls-img">
+    <img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771799247/Foto-per-sito-1200x600-px-04-2_qkoemw.jpg" alt="EOLO life">
+    <div class="ls-caption"><span class="ls-cap-text" data-i18n="ls1">Diseñados para vivir el mar</span></div>
+  </div>
+  <div class="ls-img">
+    <img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771799433/eolo-plovilo-dolasku-5-mjesec-2026-slika-264193627_xzhbvk.jpg" alt="EOLO experience">
+    <div class="ls-caption"><span class="ls-cap-text" data-i18n="ls2">100% Made in Italy · 47 anni</span></div>
+  </div>
+</div>
 
 <!-- FLEET -->
 <section id="flotta">
-  <div class="sdiv reveal"><div class="sdiv-line"></div><div class="sdiv-diamond"></div><div class="sdiv-text" data-i18n="div_fleet">La Flota</div><div class="sdiv-diamond"></div><div class="sdiv-line"></div></div>
-  <div style="padding:50px 0 0;">
-    <div class="fleet-hdr reveal">
+  <div class="div rv" style="margin-top:80px;"><div class="div-l"></div><div class="div-d"></div><div class="div-t" data-i18n="d_fleet">La Flota</div><div class="div-d"></div><div class="div-l"></div></div>
+  <div style="padding:40px 0 0;">
+    <div class="fhdr rv">
       <div>
-        <div class="fleet-ey" data-i18n="fleet_eyebrow">Colección Completa 2024</div>
-        <div class="fleet-ttl">NUESTRA<br>FLOTA<span class="fleet-sub" data-i18n="fleet_title_sub">Diseño. Pasión. Mar.</span></div>
+        <div class="fey" data-i18n="fey">Colección Completa 2024</div>
+        <div class="fttl">NUESTRA<br>FLOTA<span class="fsub" data-i18n="fsub">Diseño. Pasión. Mar.</span></div>
       </div>
-      <div class="fleet-desc-txt" data-i18n="fleet_desc">Cada embarcación expresa el compromiso de Eolo con la excelencia artesanal italiana y la ingeniería naval de vanguardia.</div>
+      <div class="fdes" data-i18n="fdes">Cada embarcación expresa el compromiso de Eolo con la excelencia artesanal italiana y la ingeniería naval de vanguardia.</div>
     </div>
     <div class="pills" id="pills">
-      <div class="pill active" onclick="goToBoat(0)">AS Marine 19 GL</div>
-      <div class="pill" onclick="goToBoat(1)">Eolo 6.4 Open</div>
-      <div class="pill" onclick="goToBoat(2)">Eolo 6.4 EL</div>
-      <div class="pill" onclick="goToBoat(3)">Eolo 6.9 EL</div>
-      <div class="pill" onclick="goToBoat(4)">Eolo 7.9</div>
-      <div class="pill" onclick="goToBoat(5)">Eolo Nove</div>
+      <div class="pill on" onclick="go(0)">AS Marine 19 GL</div>
+      <div class="pill" onclick="go(1)">Eolo 6.4 Open</div>
+      <div class="pill" onclick="go(2)">Eolo 6.4 EL</div>
+      <div class="pill" onclick="go(3)">Eolo 6.9 EL</div>
+      <div class="pill" onclick="go(4)">Eolo 830</div>
+      <div class="pill" onclick="go(5)">Eolo Nove</div>
     </div>
     <div class="fleet-wrap">
-      <div class="fleet-track" id="fleetTrack">
+      <div class="fleet-track" id="track">
 
-<!-- ========= BOAT 1 ========= -->
-<div class="boat-card">
-  <div class="bv">
-    <div class="bv-bg"><img class="bgimg" src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771721513/ChatGPT_Image_Feb_19_2026_08_21_46_PM_ihiyni.png" alt="AS Marine bg"><div class="bv-ov"></div></div>
-    <div class="bv-png"><img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771721513/ChatGPT_Image_Feb_19_2026_08_21_46_PM_ihiyni.png" alt="AS Marine 19 GL"></div>
-    <div class="bv-num">01 / 06</div><div class="bv-len">5.7m</div>
-  </div>
-  <div class="bi">
-    <div class="bi-bgtxt">19GL</div>
-    <div class="btag" data-i18n="boat_tag_open">Open · Coastal Cat. C</div>
-    <div class="bname">AS MARINE<br>19 GL</div>
-    <div class="bdesc" data-i18n="boat1_desc">Embarcación open de 5,70 m para navegación ágil. Ideal para salidas en familia, combina ligereza, estabilidad y amplias zonas de solárium.</div>
-    <div class="bspecs">
-      <div><span class="sv">5.7m</span><span class="sk" data-i18n="spec_length">Eslora</span></div>
-      <div><span class="sv">7</span><span class="sk" data-i18n="spec_persons">Personas</span></div>
-      <div><span class="sv">115CV</span><span class="sk" data-i18n="spec_engine">Motor Máx.</span></div>
-    </div>
-    <div class="acc">
-      <div class="ag"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="feat_comfort">Confort & Funcionalidad</span><span class="ai">+</span></div>
-        <div class="ab"><div class="ab-inner"><span class="chip" data-i18n="fc_solar_proa">Solárium proa</span><span class="chip" data-i18n="fc_seats_popa">Asientos popa</span><span class="chip" data-i18n="fc_stair">Escalera inox</span><span class="chip" data-i18n="fc_12v">Toma 12V</span><span class="chip" data-i18n="fc_horn">Bocina</span></div></div></div>
-      <div class="ag"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="feat_extra">Equipamiento Extra</span><span class="ai">+</span></div>
-        <div class="ab"><div class="ab-inner"><span class="chip" data-i18n="fe_bimini_alum">Bimini aluminio</span><span class="chip" data-i18n="fe_bimini_inox">Bimini inox 3 arcos</span><span class="chip" data-i18n="fe_flexiteek">Flexiteek</span><span class="chip" data-i18n="fe_sound">Equipo sonido</span><span class="chip" data-i18n="fe_water">Agua y ducha 39L</span></div></div></div>
-    </div>  </div>
-</div>
-
-<!-- ========= BOAT 2 ========= -->
-<div class="boat-card">
-  <div class="bv">
-    <div class="bv-bg"><img class="bgimg" src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771721513/ChatGPT_Image_Feb_16_2026_at_03_03_49_PM_koq6qg.png" alt="Eolo 6.4 Open bg"><div class="bv-ov"></div></div>
-    <div class="bv-png"><img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771721513/ChatGPT_Image_Feb_16_2026_at_03_03_49_PM_koq6qg.png" alt="Eolo 6.4 Open"></div>
-    <div class="bv-num">02 / 06</div><div class="bv-len">6.4m</div>
-  </div>
-  <div class="bi">
-    <div class="bi-bgtxt">OPEN</div>
-    <div class="btag" data-i18n="boat_tag_sport">Open Deportivo · Recreativo</div>
-    <div class="bname">EOLO<br>6.4 OPEN</div>
-    <div class="bdesc" data-i18n="boat2_desc">Diseño deportivo con distribución funcional. Ideal para recreación, pesca ligera y cruceros costeros. Hasta 8 personas y 150 CV.</div>
-    <div class="bspecs">
-      <div><span class="sv">6.4m</span><span class="sk" data-i18n="spec_length">Eslora</span></div>
-      <div><span class="sv">8</span><span class="sk" data-i18n="spec_persons">Personas</span></div>
-      <div><span class="sv">150CV</span><span class="sk" data-i18n="spec_engine">Motor Máx.</span></div>
-    </div>
-    <div class="acc">
-      <div class="ag"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="feat_exterior">Confort Exterior</span><span class="ai">+</span></div>
-        <div class="ab"><div class="ab-inner"><span class="chip" data-i18n="fex_kitchen">Cocina exterior</span><span class="chip" data-i18n="fe_led">Pack LED</span><span class="chip" data-i18n="fex_fridge">Nevera bañera</span><span class="chip" data-i18n="fe_water">Agua y ducha</span><span class="chip" data-i18n="fex_sink">Grifo/fregadero</span></div></div></div>
-      <div class="ag"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="feat_deck">Cubierta & Solar</span><span class="ai">+</span></div>
-        <div class="ab"><div class="ab-inner"><span class="chip" data-i18n="fd_ext_solar">Extensión solárium popa</span><span class="chip" data-i18n="fd_bimini3">Bimini inox 3 arcos</span><span class="chip" data-i18n="fd_bimini4">Bimini inox 4 arcos</span></div></div></div>
-      <div class="ag"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="feat_maneuver">Gobierno & Maniobra</span><span class="ai">+</span></div>
-        <div class="ab"><div class="ab-inner"><span class="chip" data-i18n="fm_hydro">Dirección hidráulica</span><span class="chip" data-i18n="fm_winch">Molinete eléctrico</span><span class="chip" data-i18n="fm_sound2">Sonido 2 altavoces</span></div></div></div>
-    </div>  </div>
-</div>
-
-<!-- ========= BOAT 3 ========= -->
-<div class="boat-card">
-  <div class="bv">
-    <div class="bv-bg"><img class="bgimg" src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771721513/ChatGPT_Image_Feb_16_2026_at_03_03_53_PM_pomome.png" alt="Eolo 6.4 EL bg"><div class="bv-ov"></div></div>
-    <div class="bv-png"><img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771722522/18_sulxky.png" alt="Eolo 6.4 EL"></div>
-    <div class="bv-num">03 / 06</div><div class="bv-len">6.4m</div>
-  </div>
-  <div class="bi">
-    <div class="bi-bgtxt">6.4EL</div>
-    <div class="btag" data-i18n="boat_tag_cabin">Crucero Compacto · Cabina</div>
-    <div class="bname">EOLO<br>6.4 EL</div>
-    <div class="bdesc" data-i18n="boat3_desc">Crucero compacto con cabina. Combina elegancia y confort en 6,40 m con solárium en proa y popa. Ideal para escapadas cortas y salidas familiares.</div>
-    <div class="bspecs">
-      <div><span class="sv">6.4m</span><span class="sk" data-i18n="spec_length">Eslora</span></div>
-      <div><span class="sv">7</span><span class="sk" data-i18n="spec_persons">Personas</span></div>
-      <div><span class="sv">FUERAB.</span><span class="sk" data-i18n="spec_prop">Propulsión</span></div>
-    </div>
-    <div class="acc">
-      <div class="ag"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="feat_comfort">Confort & Funcionalidad</span><span class="ai">+</span></div>
-        <div class="ab"><div class="ab-inner"><span class="chip" data-i18n="fc_solar_proa">Solárium proa</span><span class="chip" data-i18n="fc_solar_popa_ext">Solárium popa ext.</span><span class="chip" data-i18n="fc_beige_cushions">Cojinería beige</span><span class="chip" data-i18n="fc_stair">Escalera inox</span><span class="chip" data-i18n="fc_12v">Toma 12V</span></div></div></div>
-      <div class="ag"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="feat_extra_opt">Opciones Extra</span><span class="ai">+</span></div>
-        <div class="ab"><div class="ab-inner"><span class="chip" data-i18n="fo_bimini_inox">Bimini inox 3/4 arcos</span><span class="chip" data-i18n="fo_flexiteek">Plataforma Flexiteek</span><span class="chip" data-i18n="fo_hydraulic">Dir. hidráulica</span><span class="chip" data-i18n="fo_winch">Molinete eléctrico</span><span class="chip" data-i18n="fo_wc">WC químico</span><span class="chip" data-i18n="fo_kitchen">Cocina/fogón</span></div></div></div>
-    </div>  </div>
-</div>
-
-<!-- ========= BOAT 4 ========= -->
-<div class="boat-card">
-  <div class="bv">
-    <div class="bv-bg"><img class="bgimg" src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771723616/WhatsApp-Image-2025-01-22-at-16.45.28_xciuoq.jpg" alt="Eolo 6.9 EL bg"><div class="bv-ov"></div></div>
-    <div class="bv-num">04 / 06</div><div class="bv-len">6.9m</div>
-  </div>
-  <div class="bi">
-    <div class="bi-bgtxt">6.9EL</div>
-    <div class="btag" data-i18n="boat_tag_versatile">Versátil · Recreativo</div>
-    <div class="bname">EOLO<br>6.9 EL</div>
-    <div class="bdesc" data-i18n="boat4_desc">Embarcación de 6,90 m para navegación recreativa con hasta 7 personas. Casco equilibrado, amplias zonas de solárium y bañera funcional para salidas de día o cruceros costeros.</div>
-    <div class="bspecs">
-      <div><span class="sv">6.9m</span><span class="sk" data-i18n="spec_length">Eslora</span></div>
-      <div><span class="sv">7</span><span class="sk" data-i18n="spec_persons">Personas</span></div>
-      <div><span class="sv">CAT.C</span><span class="sk" data-i18n="spec_cat">Categoría</span></div>
-    </div>
-    <div class="acc">
-      <div class="ag"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="feat_standard">Equipamiento Standard</span><span class="ai">+</span></div>
-        <div class="ab"><div class="ab-inner"><span class="chip" data-i18n="fs_casco_blanco">Casco blanco</span><span class="chip" data-i18n="fs_cojineria">Cojinería beige</span><span class="chip" data-i18n="fs_solar_proa">Solárium proa</span><span class="chip" data-i18n="fs_windshield">Parabrisas inox</span><span class="chip" data-i18n="fe_bilge">Bomba achique</span></div></div></div>
-      <div class="ag"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="feat_extra">Equipamiento Extra</span><span class="ai">+</span></div>
-        <div class="ab"><div class="ab-inner"><span class="chip" data-i18n="fex_gas_cooker">Cocina gas</span><span class="chip" data-i18n="fex_fridge">Nevera bañera</span><span class="chip" data-i18n="fe_water">Agua y ducha</span><span class="chip" data-i18n="fex_zipwake">Flaps ZipWake</span><span class="chip" data-i18n="fex_sound4">Sonido 4 altavoces</span><span class="chip" data-i18n="fo_wc">WC químico</span></div></div></div>
-    </div>  </div>
-</div>
-
-<!-- ========= BOAT 5 ========= -->
-<div class="boat-card">
-  <div class="bv">
-    <div class="bv-bg"><img class="bgimg" src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771721535/DJI_0478_gx9rvb.jpg" alt="Eolo 7.9 bg"><div class="bv-ov"></div></div>
-    <div class="bv-png"><img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771721535/DJI_0478_gx9rvb.jpg" alt="Eolo 7.9" style="border-radius:3px;max-height:75%;"></div>
-    <div class="bv-num">05 / 06</div><div class="bv-len">7.9m</div>
-  </div>
-  <div class="bi">
-    <div class="bi-bgtxt">7.9</div>
-    <div class="btag" data-i18n="boat_tag_premium">Day Cruiser · Premium</div>
-    <div class="bname">EOLO<br>7.9</div>
-    <div class="bdesc" data-i18n="boat5_desc">La Eolo 7.9 ofrece equilibrio entre deportividad, confort y elegancia. Amplia cubierta con gran solárium en proa y popa, cabina cuidada para escapadas de fin de semana y navegación suave y segura.</div>
-    <div class="bspecs">
-      <div><span class="sv">7.9m</span><span class="sk" data-i18n="spec_length">Eslora</span></div>
-      <div><span class="sv">PREMIUM</span><span class="sk" data-i18n="spec_cat">Categoría</span></div>
-      <div><span class="sv">CABIN</span><span class="sk" data-i18n="feat_interior">Equipamiento Interior</span></div>
-    </div>
-    <div class="acc">
-      <div class="ag"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="feat_standard">Equipamiento Standard</span><span class="ai">+</span></div>
-        <div class="ab"><div class="ab-inner"><span class="chip">Solárium proa y popa</span><span class="chip">Cabina interior cuidada</span><span class="chip">Casco estable y eficiente</span><span class="chip">Plataforma trasera sintética</span><span class="chip">Ideal para salidas de fin de semana</span></div></div></div>
-      <div class="ag"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="feat_maneuver">Gobierno & Maniobra</span><span class="ai">+</span></div>
-        <div class="ab"><div class="ab-inner"><span class="chip" data-i18n="fm_hydro">Dirección hidráulica</span><span class="chip" data-i18n="fm_winch">Molinete eléctrico</span><span class="chip" data-i18n="fm_flaps">Aletas eléctricas</span><span class="chip" data-i18n="fm_charger220">Cargador 220V</span><span class="chip" data-i18n="fm_sound4">Estéreo 4 altavoces</span><span class="chip" data-i18n="fm_flexiteek">Plataforma Flexiteek</span></div></div></div>
-    </div>  </div>
-</div>
-
-<!-- ========= BOAT 6 : NOVE ========= -->
-<div class="boat-card">
-  <div class="bv">
-    <div class="bv-bg"><img class="bgimg" src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771721997/ChatGPT_Image_Feb_19_2026_at_04_02_56_PM_vhaqvw.png" alt="Eolo Nove bg" style="filter:brightness(0.42);"><div class="bv-ov" style="background:linear-gradient(90deg,transparent 28%,rgba(6,14,28,0.96) 100%);"></div></div>
-    <div class="bv-png"><img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771721997/ChatGPT_Image_Feb_19_2026_at_04_02_56_PM_vhaqvw.png" alt="Eolo Nove"></div>
-    <div class="bv-num">06 / 06</div><div class="bv-len" style="color:rgba(200,169,110,0.15);">NOVE</div>
-  </div>
-  <div class="bi" style="background:linear-gradient(135deg,#0c1a30,#0a1525);">
-    <div class="bi-bgtxt" style="color:rgba(200,169,110,0.04);">NOVE</div>
-    <div class="btag" style="color:var(--gold-light);" data-i18n="boat_tag_luxury">Flagship · Luxury · Premium</div>
-    <div class="bname" style="background:linear-gradient(135deg,#fff 30%,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">EOLO<br>NOVE</div>
-    <div class="bdesc" data-i18n="boat6_desc">La Eolo Nove combina diseño italiano, espacio y prestaciones de alto nivel. Su casco en V profunda garantiza navegación estable y confortable, con amplia cubierta, gran zona exterior y cabina elegante para escapadas de varios días.</div>
-    <div class="bspecs">
-      <div><span class="sv" style="color:var(--gold-light);">540L</span><span class="sk" data-i18n="spec_fuel">Combustible</span></div>
-      <div><span class="sv" style="color:var(--gold-light);">GPS</span><span class="sk" data-i18n="spec_nav">Navegación</span></div>
-      <div><span class="sv" style="color:var(--gold-light);">VHF</span><span class="sk" data-i18n="spec_comm">Comunicación</span></div>
-    </div>
-    <div class="acc">
-      <div class="ag" style="border-color:rgba(200,169,110,0.12);"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="feat_interior">Equipamiento Interior</span><span class="ai">+</span></div>
-        <div class="ab"><div class="ab-inner"><span class="chip" data-i18n="fi_double_bed">Cama doble convertible proa</span><span class="chip" data-i18n="fi_aft_cabin">Cabina aft 2 literas</span><span class="chip" data-i18n="fi_full_bath">Baño completo</span><span class="chip" data-i18n="fi_sep_shower">Ducha separada</span><span class="chip" data-i18n="fi_electric_wc">WC eléctrico</span><span class="chip" data-i18n="fi_wood_floor">Suelo laminado</span></div></div></div>
-      <div class="ag" style="border-color:rgba(200,169,110,0.12);"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="feat_premium_options">Opciones Premium</span><span class="ai">+</span></div>
-        <div class="ab"><div class="ab-inner"><span class="chip" data-i18n="fp_bow_thruster">Hélice de proa</span><span class="chip" data-i18n="fp_auto_flaps">Flaps automáticos</span><span class="chip" data-i18n="fp_ttop">T-Top fibra vidrio</span><span class="chip" data-i18n="fp_aircon">Aire acondicionado</span><span class="chip" data-i18n="fp_tv">TV en cabina</span><span class="chip" data-i18n="fp_boiler">Boiler 20L</span><span class="chip" data-i18n="fp_underwater_lights">Luces subacuáticas</span></div></div></div>
-    </div>  </div>
-</div>
-
-      </div><!-- /fleet-track -->
-    </div><!-- /fleet-wrap -->
-    <div class="fnav">
-      <button class="fnbtn" onclick="prevBoat()">←</button>
-      <div class="fdots" id="fdots">
-        <div class="fdot active" onclick="goToBoat(0)"></div>
-        <div class="fdot" onclick="goToBoat(1)"></div>
-        <div class="fdot" onclick="goToBoat(2)"></div>
-        <div class="fdot" onclick="goToBoat(3)"></div>
-        <div class="fdot" onclick="goToBoat(4)"></div>
-        <div class="fdot" onclick="goToBoat(5)"></div>
+<!-- ====== BOAT 1: AS MARINE 19 GL ====== -->
+<div class="bcard">
+  <div class="bcbg"><img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771721513/ChatGPT_Image_Feb_19_2026_08_21_46_PM_ihiyni.png" alt="AS Marine 19 GL"></div>
+  <div class="bcov1"></div><div class="bcov2"></div>
+  <div class="bcnum">01 / 06</div>
+  <div class="bcpanel">
+    <div class="bcl">
+      <div class="bctag" data-i18n="b1tag">Open · Costera Cat. C · 5.70m</div>
+      <div class="bcname">AS MARINE<br>19 GL</div>
+      <div class="bcspecs">
+        <div><span class="bcsv">5.7m</span><span class="bcsk" data-i18n="spec_l">Eslora</span></div>
+        <div><span class="bcsv">7</span><span class="bcsk" data-i18n="spec_p">Personas</span></div>
+        <div><span class="bcsv">115CV</span><span class="bcsk" data-i18n="spec_e">Motor Máx.</span></div>
       </div>
-      <button class="fnbtn" onclick="nextBoat()">→</button>
+    </div>
+    <div class="bcr">
+      <div class="bcdesc" data-i18n="b1desc">Open de 5,70 m para navegación ágil y deportiva. Consola central, grandes soláriums, hasta 7 personas. Estilo mediterráneo con rendimiento y maniobrabilidad excepcionales.</div>
+      <div class="acc">
+        <div class="ag"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="a_std">Equipamiento Standard</span><span class="ai">+</span></div>
+          <div class="ab"><div class="abi">
+            <span class="chip">Casco blanco · cojinería beige</span><span class="chip">Solárium proa</span><span class="chip">Parabrisas inox</span><span class="chip">Rodillo proa</span><span class="chip">Asientos popa</span><span class="chip">Escalera inox</span><span class="chip">Bocina · 12V</span><span class="chip">Luces navegación</span><span class="chip">Bomba achique</span>
+          </div></div>
+        </div>
+        <div class="ag"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="a_ext">Opciones Extra</span><span class="ai">+</span></div>
+          <div class="ab"><div class="abi">
+            <span class="chip">Bimini aluminio</span><span class="chip">Bimini inox 3 arcos</span><span class="chip">Flexiteek popa y bañera</span><span class="chip">Agua y ducha 39L</span><span class="chip">Equipo sonido 2 alt.</span><span class="chip">Pie de mesa</span><span class="chip">Banda color casco</span><span class="chip">Color total casco</span>
+          </div></div>
+        </div>
+      </div>
+      <div class="qrb"><div class="qrw" id="qr0"></div><div><span class="ql" data-i18n="ql">Catálogo PDF</span><span class="qd" data-i18n="qd">Escanea para la ficha técnica completa</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== BOAT 2: EOLO 6.4 OPEN ====== -->
+<div class="bcard">
+  <div class="bcbg"><img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771721513/ChatGPT_Image_Feb_16_2026_at_03_03_46_PM_wzcqak.png" alt="Eolo 6.4 Open"></div>
+  <div class="bcov1"></div><div class="bcov2"></div>
+  <div class="bcnum">02 / 06</div>
+  <div class="bcpanel">
+    <div class="bcl">
+      <div class="bctag" data-i18n="b2tag">Open Deportivo · Recreativo · 6.40m</div>
+      <div class="bcname">EOLO<br>6.4 OPEN</div>
+      <div class="bcspecs">
+        <div><span class="bcsv">6.4m</span><span class="bcsk" data-i18n="spec_l">Eslora</span></div>
+        <div><span class="bcsv">8</span><span class="bcsk" data-i18n="spec_p">Personas</span></div>
+        <div><span class="bcsv">150CV</span><span class="bcsk" data-i18n="spec_e">Motor Máx.</span></div>
+      </div>
+    </div>
+    <div class="bcr">
+      <div class="bcdesc" data-i18n="b2desc">Open de 6,40 m con diseño deportivo, amplio solárium y capacidad para 8 personas. Ideal para salidas recreativas, pesca ligera y cruceros costeros. Fueraborda hasta 150 CV.</div>
+      <div class="acc">
+        <div class="ag"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="a_std">Equipamiento Standard</span><span class="ai">+</span></div>
+          <div class="ab"><div class="abi">
+            <span class="chip">Casco blanco</span><span class="chip">Cojinería beige</span><span class="chip">Solárium proa</span><span class="chip">Parabrisas inox</span><span class="chip">Rodillo proa</span><span class="chip">Escalera inox</span><span class="chip">Bocina · 12V</span><span class="chip">Luces navegación · 360°</span><span class="chip">Bomba achique</span>
+          </div></div>
+        </div>
+        <div class="ag"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="a_ext">Opciones Extra</span><span class="ai">+</span></div>
+          <div class="ab"><div class="abi">
+            <span class="chip">Cocina exterior</span><span class="chip">Pack luces LED</span><span class="chip">Nevera bañera</span><span class="chip">Agua y ducha</span><span class="chip">Grifo/fregadero</span><span class="chip">Pie de mesa</span><span class="chip">Ext. solárium popa</span><span class="chip">Bimini inox 3/4 arcos</span><span class="chip">Cubierta casco</span><span class="chip">Dir. hidráulica</span><span class="chip">Molinete eléctrico</span><span class="chip">Sonido 2 altavoces</span><span class="chip">Banda color · Color total</span>
+          </div></div>
+        </div>
+      </div>
+      <div class="qrb"><div class="qrw" id="qr1"></div><div><span class="ql" data-i18n="ql">Catálogo PDF</span><span class="qd" data-i18n="qd">Escanea para la ficha técnica completa</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== BOAT 3: EOLO 6.4 EL ====== -->
+<div class="bcard">
+  <div class="bcbg"><img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771721513/ChatGPT_Image_Feb_16_2026_at_03_03_49_PM_koq6qg.png" alt="Eolo 6.4 EL"></div>
+  <div class="bcov1"></div><div class="bcov2"></div>
+  <div class="bcnum">03 / 06</div>
+  <div class="bcpanel">
+    <div class="bcl">
+      <div class="bctag" data-i18n="b3tag">Crucero Compacto · Cabina · 6.40m</div>
+      <div class="bcname">EOLO<br>6.4 EL</div>
+      <div class="bcspecs">
+        <div><span class="bcsv">6.4m</span><span class="bcsk" data-i18n="spec_l">Eslora</span></div>
+        <div><span class="bcsv">7</span><span class="bcsk" data-i18n="spec_p">Personas</span></div>
+        <div><span class="bcsv">FUERAB.</span><span class="bcsk" data-i18n="spec_pr">Propulsión</span></div>
+      </div>
+    </div>
+    <div class="bcr">
+      <div class="bcdesc" data-i18n="b3desc">Crucero compacto con cabina que combina elegancia y funcionalidad en 6,40 m. Amplios soláriums en proa y popa, distribución versátil para hasta 7 personas. Ideal para pesca ligera y cruceros costeros.</div>
+      <div class="acc">
+        <div class="ag"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="a_std">Equipamiento Standard</span><span class="ai">+</span></div>
+          <div class="ab"><div class="abi">
+            <span class="chip">Casco blanco</span><span class="chip">Cojinería beige</span><span class="chip">Solárium proa</span><span class="chip">Solárium popa + ext.</span><span class="chip">Rodillo proa</span><span class="chip">Pasamanos proa inox</span><span class="chip">Escalera inox</span><span class="chip">Bomba achique</span><span class="chip">Sistema eléctrico + brújula</span><span class="chip">12V · Bocina · Luces nav.</span>
+          </div></div>
+        </div>
+        <div class="ag"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="a_ext">Opciones Extra</span><span class="ai">+</span></div>
+          <div class="ab"><div class="abi">
+            <span class="chip">Cocina/fogón</span><span class="chip">Nevera bañera</span><span class="chip">Agua y ducha</span><span class="chip">Grifo y lavabo</span><span class="chip">Pack luces LED</span><span class="chip">Bimini inox 3/4 arcos</span><span class="chip">Flexiteek plataforma</span><span class="chip">Escalón adicional</span><span class="chip">Dir. hidráulica</span><span class="chip">Molinete eléctrico</span><span class="chip">WC químico</span><span class="chip">Banda/color casco</span>
+          </div></div>
+        </div>
+      </div>
+      <div class="qrb"><div class="qrw" id="qr2"></div><div><span class="ql" data-i18n="ql">Catálogo PDF</span><span class="qd" data-i18n="qd">Escanea para la ficha técnica completa</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== BOAT 4: EOLO 6.9 EL ====== -->
+<div class="bcard">
+  <div class="bcbg"><img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771723616/WhatsApp-Image-2025-01-22-at-16.45.28_xciuoq.jpg" alt="Eolo 6.9 EL"></div>
+  <div class="bcov1"></div><div class="bcov2"></div>
+  <div class="bcnum">04 / 06</div>
+  <div class="bcpanel">
+    <div class="bcl">
+      <div class="bctag" data-i18n="b4tag">Versátil · Recreativo · 6.90m</div>
+      <div class="bcname">EOLO<br>6.9 EL</div>
+      <div class="bcspecs">
+        <div><span class="bcsv">6.9m</span><span class="bcsk" data-i18n="spec_l">Eslora</span></div>
+        <div><span class="bcsv">7</span><span class="bcsk" data-i18n="spec_p">Personas</span></div>
+        <div><span class="bcsv">Cat. C</span><span class="bcsk" data-i18n="spec_c">Categoría</span></div>
+      </div>
+    </div>
+    <div class="bcr">
+      <div class="bcdesc" data-i18n="b4desc">6,90 m pensada para navegación recreativa con hasta 7 personas. Casco equilibrado, amplias zonas de solárium, bañera funcional y distribución versátil para salidas de día o cruceros costeros de fin de semana.</div>
+      <div class="acc">
+        <div class="ag"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="a_std">Equipamiento Standard</span><span class="ai">+</span></div>
+          <div class="ab"><div class="abi">
+            <span class="chip">Casco blanco</span><span class="chip">Cojinería beige</span><span class="chip">Escotilla</span><span class="chip">Solárium proa</span><span class="chip">Parabrisas inox</span><span class="chip">Rodillo proa</span><span class="chip">Tabla/mesa con pie</span><span class="chip">Plataformas popa</span><span class="chip">Escalera inox</span><span class="chip">Bocina · 12V</span><span class="chip">Luces nav. · 360°</span><span class="chip">Bomba achique</span>
+          </div></div>
+        </div>
+        <div class="ag"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="a_ext">Opciones Extra</span><span class="ai">+</span></div>
+          <div class="ab"><div class="abi">
+            <span class="chip">Cocina a gas</span><span class="chip">Nevera bañera</span><span class="chip">Agua y ducha</span><span class="chip">Fregadero</span><span class="chip">Pack luces LED</span><span class="chip">Plexiglás ventanas</span><span class="chip">Ext. solárium popa</span><span class="chip">Arco inox + bimini</span><span class="chip">Toldo bañera</span><span class="chip">Bimini 3/4 arcos</span><span class="chip">Sonido 4 altavoces</span><span class="chip">Cargador 220V</span><span class="chip">Flaps ZipWake</span><span class="chip">Dir. hidráulica</span><span class="chip">Molinete eléctrico</span><span class="chip">WC químico</span>
+          </div></div>
+        </div>
+      </div>
+      <div class="qrb"><div class="qrw" id="qr3"></div><div><span class="ql" data-i18n="ql">Catálogo PDF</span><span class="qd" data-i18n="qd">Escanea para la ficha técnica completa</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== BOAT 5: EOLO 830 ====== -->
+<div class="bcard">
+  <div class="bcbg"><img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771721535/DJI_0478_gx9rvb.jpg" alt="Eolo 830"></div>
+  <div class="bcov1"></div><div class="bcov2"></div>
+  <div class="bcnum">05 / 06</div>
+  <div class="bcpanel">
+    <div class="bcl">
+      <div class="bctag" data-i18n="b5tag">Day Cruiser Premium · 8.30m</div>
+      <div class="bcname">EOLO<br>830</div>
+      <div class="bcspecs">
+        <div><span class="bcsv">8.3m</span><span class="bcsk" data-i18n="spec_l">Eslora</span></div>
+        <div><span class="bcsv">8</span><span class="bcsk" data-i18n="spec_p">Personas</span></div>
+        <div><span class="bcsv">400CV</span><span class="bcsk" data-i18n="spec_e">Motor Máx.</span></div>
+      </div>
+    </div>
+    <div class="bcr">
+      <div class="bcdesc" data-i18n="b5desc">Cabina equipada con estufa, fregadero, nevera, inodoro y cama doble. Diseño deportivo con elegancia y funcionalidad. Manga 2,55 m · Peso 1.800 kg · Categoría C.</div>
+      <div class="acc">
+        <div class="ag"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="a_tech">Características Técnicas</span><span class="ai">+</span></div>
+          <div class="ab"><div class="abi">
+            <span class="chip">Eslora 8,30 m</span><span class="chip">Manga 2,55 m</span><span class="chip">Peso 1.800 kg</span><span class="chip">Motor hasta 400 CV</span><span class="chip">Capacidad 8 personas</span><span class="chip">Categoría C</span><span class="chip">Sistema eléctrico completo</span><span class="chip">Luces nav. y 360°</span><span class="chip">Bomba achique automática</span><span class="chip">Agua y ducha · 12V</span>
+          </div></div>
+        </div>
+        <div class="ag"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="a_ext">Confort y Gobierno</span><span class="ai">+</span></div>
+          <div class="ab"><div class="abi">
+            <span class="chip">Dir. hidráulica</span><span class="chip">Molinete eléctrico</span><span class="chip">Aletas eléctricas</span><span class="chip">Cargador batería 220V</span><span class="chip">Fregadero exterior</span><span class="chip">Barra antivuelco fibra/inox</span><span class="chip">Toldo inox 4 arcos c/cierre</span><span class="chip">Pack luces LED</span><span class="chip">Estéreo 4 altavoces</span><span class="chip">Plataforma Flexiteek</span><span class="chip">Bottazzo inox</span>
+          </div></div>
+        </div>
+      </div>
+      <div class="qrb"><div class="qrw" id="qr4"></div><div><span class="ql" data-i18n="ql">Catálogo PDF</span><span class="qd" data-i18n="qd">Escanea para la ficha técnica completa</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== BOAT 6: EOLO NOVE ====== -->
+<div class="bcard">
+  <div class="bcbg"><img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771721997/ChatGPT_Image_Feb_19_2026_at_04_02_56_PM_vhaqvw.png" alt="Eolo Nove" style="filter:brightness(.5);"></div>
+  <div class="bcov1" style="background:linear-gradient(180deg,transparent 15%,rgba(6,14,28,.45) 50%,rgba(6,14,28,.98) 100%);"></div><div class="bcov2"></div>
+  <div class="bcnum">06 / 06</div>
+  <div class="bcpanel">
+    <div class="bcl">
+      <div class="bctag" style="color:var(--gold-l);" data-i18n="b6tag">Flagship · Luxury · Premium</div>
+      <div class="bcname" style="background:linear-gradient(135deg,#fff 30%,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">EOLO<br>NOVE</div>
+      <div class="bcspecs">
+        <div><span class="bcsv" style="color:var(--gold-l);">540L</span><span class="bcsk" data-i18n="spec_fu">Combustible</span></div>
+        <div><span class="bcsv" style="color:var(--gold-l);">GPS 9/12"</span><span class="bcsk" data-i18n="spec_na">Navegación</span></div>
+        <div><span class="bcsv" style="color:var(--gold-l);">VHF</span><span class="bcsk" data-i18n="spec_co">Comunicación</span></div>
+      </div>
+    </div>
+    <div class="bcr">
+      <div class="bcdesc" data-i18n="b6desc">El máximo nivel de la gama. Carena en V profunda, cubierta amplia con grandes soláriums, cabina con cama doble, cabina aft con literas y baño completo con ducha separada. Potente, versátil y refinada.</div>
+      <div class="acc">
+        <div class="ag" style="border-color:rgba(200,169,110,.12);"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="a_int">Equipamiento Interior</span><span class="ai">+</span></div>
+          <div class="ab"><div class="abi">
+            <span class="chip">Cama doble proa convertible</span><span class="chip">Sofá/dinette proa</span><span class="chip">Mesa interior</span><span class="chip">Baño completo</span><span class="chip">Lavabo + ducha separada</span><span class="chip">WC eléctrico</span><span class="chip">Cabina aft 2 literas</span><span class="chip">Suelo laminado + cortinas</span><span class="chip">Cocina inducción</span><span class="chip">Frigorífico 49L</span>
+          </div></div>
+        </div>
+        <div class="ag" style="border-color:rgba(200,169,110,.12);"><div class="ah" onclick="ta(this)"><span class="at" data-i18n="a_prem">Opciones Premium</span><span class="ai">+</span></div>
+          <div class="ab"><div class="abi">
+            <span class="chip">GPS 9" o 12" con ecosonda</span><span class="chip">VHF</span><span class="chip">Hélice de proa + batería</span><span class="chip">Flaps automáticos</span><span class="chip">Cargador 220V</span><span class="chip">Boiler 20L</span><span class="chip">TV en cabina</span><span class="chip">Aire acondicionado</span><span class="chip">Radio 6 altavoces</span><span class="chip">2 luces subacuáticas</span><span class="chip">Roll-bar inox negro + bimini</span><span class="chip">T-Top fibra vidrio</span><span class="chip">WC eléctrico aguas negras</span>
+          </div></div>
+        </div>
+      </div>
+      <div class="qrb" style="border-color:rgba(200,169,110,.3);"><div class="qrw" id="qr5"></div><div><span class="ql" data-i18n="ql">Catálogo PDF</span><span class="qd" data-i18n="qd">Escanea para la ficha técnica completa</span></div></div>
+    </div>
+  </div>
+</div>
+
+      </div><!-- /track -->
+    </div><!-- /fleet-wrap -->
+
+    <div class="fnav">
+      <button class="fnb" onclick="prev()">←</button>
+      <div class="fdots" id="dots">
+        <div class="fd on" onclick="go(0)"></div>
+        <div class="fd" onclick="go(1)"></div>
+        <div class="fd" onclick="go(2)"></div>
+        <div class="fd" onclick="go(3)"></div>
+        <div class="fd" onclick="go(4)"></div>
+        <div class="fd" onclick="go(5)"></div>
+      </div>
+      <button class="fnb" onclick="nxt()">→</button>
     </div>
   </div>
 </section>
 
-<!-- CATALOG -->
+<!-- CATALOGUE -->
 <section id="catalogo" class="catsec">
-  <div class="sdiv reveal" style="margin-top:0;"><div class="sdiv-line"></div><div class="sdiv-diamond"></div><div class="sdiv-text" data-i18n="div_catalog">Catálogo Oficial</div><div class="sdiv-diamond"></div><div class="sdiv-line"></div></div>
-  <div class="cat-inner" style="margin-top:60px;">
-    <div class="reveal">
-      <div class="cat-ey" data-i18n="cat_eyebrow">Catálogo Oficial · Eolo Marine 2024</div>
-      <h2 class="cat-ttl" data-i18n="cat_title">Descarga el Catálogo<br><strong>Físico Completo</strong></h2>
-      <p class="cat-desc-txt" data-i18n="cat_desc">Accede a la ficha técnica completa, lista de equipamientos, opciones de personalización y especificaciones de toda la flota Eolo en formato PDF de alta calidad.</p>
-      <div class="cat-feats">
-        <div class="cf"><div class="cf-dot"></div><span class="cf-txt" data-i18n="catf_models">6 modelos completos</span></div>
-        <div class="cf"><div class="cf-dot"></div><span class="cf-txt" data-i18n="catf_specs">Especificaciones técnicas</span></div>
-        <div class="cf"><div class="cf-dot"></div><span class="cf-txt" data-i18n="catf_equip">Listas de equipamiento</span></div>
-        <div class="cf"><div class="cf-dot"></div><span class="cf-txt" data-i18n="catf_custom">Opciones personalización</span></div>
+  <div class="div rv" style="margin-top:0;"><div class="div-l"></div><div class="div-d"></div><div class="div-t" data-i18n="d_cat">Catálogo Oficial</div><div class="div-d"></div><div class="div-l"></div></div>
+  <div class="catinner" style="margin-top:52px;">
+    <div class="rv">
+      <div class="catey" data-i18n="catey">Catálogo Oficial · Eolo Marine 2024</div>
+      <h2 class="cattl" data-i18n="cattl">Descarga el Catálogo<br><strong>Físico Completo</strong></h2>
+      <p class="catdesc" data-i18n="catd">Accede a las fichas técnicas completas, listas de equipamientos, opciones de personalización y especificaciones de toda la flota Eolo en formato PDF de alta calidad.</p>
+      <div class="catfs">
+        <div class="cf"><div class="cfd"></div><span class="cft" data-i18n="cf1">6 modelos completos</span></div>
+        <div class="cf"><div class="cfd"></div><span class="cft" data-i18n="cf2">Especificaciones técnicas</span></div>
+        <div class="cf"><div class="cfd"></div><span class="cft" data-i18n="cf3">Listas de equipamiento</span></div>
+        <div class="cf"><div class="cfd"></div><span class="cft" data-i18n="cf4">Opciones personalización</span></div>
       </div>
-      <button class="btn-gold" onclick="alert('Link al PDF: EOLO_PRESENTATION.pdf')" data-i18n="cta_btn">Descargar PDF</button>
-    </div>  </div>
+      <button class="btn-g" onclick="window.open('EOLO_PRESENTATION.pdf')" data-i18n="cta">Descargar PDF</button>
+    </div>
+    <div class="catr rv rd">
+      <div class="bqw" id="bigQR"></div>
+      <div class="bql" data-i18n="qscan">Escanear para descargar</div>
+    </div>
+  </div>
 </section>
 
 <!-- FOOTER -->
 <footer id="contatti">
-  <div class="footer-top">
+  <div class="ftop">
     <div>
-      <img src="https://res.cloudinary.com/dxhef6dju/image/upload/v1771722252/Eolo_Logo-nero-e1729522648126_kxdau5.png" alt="EOLO" class="fl-logo">
-      <div class="fl-tag" data-i18n="footer_tagline">Ensure the best experience.</div>
-      <div class="fl-contacts">
-        <div class="flc"><span class="flc-i">✆</span> +123-456-7890</div>
-        <div class="flc"><span class="flc-i">✉</span> info@eolomarine.it</div>
-        <div class="flc"><span class="flc-i">⊕</span> www.eolomarine.it</div>
+      <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCADcAlgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD8qqKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAP/2Q==" alt="EOLO" class="flogo">
+      <div class="ftag">Ensure the best experience.</div>
+      <div class="fcts">
+        <div class="fct"><span class="fci">✆</span>+123-456-7890</div>
+        <div class="fct"><span class="fci">✉</span>info@eolomarine.it</div>
+        <div class="fct"><span class="fci">⊕</span>www.eolomarine.it</div>
       </div>
     </div>
     <div>
-      <div class="fcol-ttl" data-i18n="footer_models">Modelos</div>
-      <div class="fl-links">
-        <a href="#" class="fl-lnk" onclick="goToBoat(0);document.getElementById('flotta').scrollIntoView({behavior:'smooth'})">AS Marine 19 GL</a>
-        <a href="#" class="fl-lnk" onclick="goToBoat(1);document.getElementById('flotta').scrollIntoView({behavior:'smooth'})">Eolo 6.4 Open</a>
-        <a href="#" class="fl-lnk" onclick="goToBoat(2);document.getElementById('flotta').scrollIntoView({behavior:'smooth'})">Eolo 6.4 EL</a>
-        <a href="#" class="fl-lnk" onclick="goToBoat(3);document.getElementById('flotta').scrollIntoView({behavior:'smooth'})">Eolo 6.9 EL</a>
-        <a href="#" class="fl-lnk" onclick="goToBoat(4);document.getElementById('flotta').scrollIntoView({behavior:'smooth'})">Eolo 7.9</a>
-        <a href="#" class="fl-lnk" onclick="goToBoat(5);document.getElementById('flotta').scrollIntoView({behavior:'smooth'})">Eolo Nove</a>
+      <div class="fcttl" data-i18n="fm">Modelos</div>
+      <div class="fls">
+        <a href="#" class="fl" onclick="go(0);document.getElementById('flotta').scrollIntoView({behavior:'smooth'})">AS Marine 19 GL</a>
+        <a href="#" class="fl" onclick="go(1);document.getElementById('flotta').scrollIntoView({behavior:'smooth'})">Eolo 6.4 Open</a>
+        <a href="#" class="fl" onclick="go(2);document.getElementById('flotta').scrollIntoView({behavior:'smooth'})">Eolo 6.4 EL</a>
+        <a href="#" class="fl" onclick="go(3);document.getElementById('flotta').scrollIntoView({behavior:'smooth'})">Eolo 6.9 EL</a>
+        <a href="#" class="fl" onclick="go(4);document.getElementById('flotta').scrollIntoView({behavior:'smooth'})">Eolo 830</a>
+        <a href="#" class="fl" onclick="go(5);document.getElementById('flotta').scrollIntoView({behavior:'smooth'})">Eolo Nove</a>
       </div>
     </div>
     <div>
-      <div class="fcol-ttl" data-i18n="footer_company">Empresa</div>
-      <div class="fl-links">
-        <a href="#storia" class="fl-lnk" data-i18n="nav_history">Historia</a>
-        <a href="#catalogo" class="fl-lnk" data-i18n="footer_catalog">Catálogo PDF</a>
-        <a href="#" class="fl-lnk" data-i18n="footer_events">News & Events</a>
-        <a href="#contatti" class="fl-lnk" data-i18n="nav_contact">Contacto</a>
+      <div class="fcttl" data-i18n="fc">Empresa</div>
+      <div class="fls">
+        <a href="#storia" class="fl" data-i18n="nav_history">Historia</a>
+        <a href="#catalogo" class="fl" data-i18n="nav_catalog">Catálogo PDF</a>
+        <a href="#contatti" class="fl" data-i18n="nav_contact">Contacto</a>
       </div>
     </div>
   </div>
-  <div class="footer-btm">
-    <div class="fcopy" data-i18n="footer_copy">© 2024 Eolo Marine · Familia Fortunato · Tutti i diritti riservati</div>
-    <div class="fmade">100% Made in Italy</div>
+  <div class="fbtm">
+    <div class="fcp" data-i18n="fcp">© 2024 Eolo Marine · Familia Fortunato · Tutti i diritti riservati</div>
+    <div class="fmi">100% Made in Italy</div>
   </div>
 </footer>
 
 <script>
-// ====== TRANSLATIONS ======
-const T={es:{loading:"Cargando",nav_history:"Historia",nav_fleet:"Flota",nav_catalog:"Catálogo",nav_contact:"Contacto",hero_eyebrow:"47 años · Made in Italy · Familia Fortunato",hero_italic:"Excellence & Passion",hero_sub:"Astillero Italiano · Calidad Artesanal · Pasión por el Mar",hero_btn_fleet:"Explorar Flota",hero_btn_catalog:"Catálogo PDF",scroll_hint:"Scroll",div_story:"Nuestra Historia",div_fleet:"La Flota",div_catalog:"Catálogo Oficial",hist_label:"Astillero Italiano · Desde 1977",hist_heading:"La historia de quienes<br><em>aman el mar</em>",hist_body1:"Quien ama el mar sabe que debe tener dos cualidades esenciales: tenacidad y perseverancia. Porque el mar puede cambiar cada minuto y los vientos no siempre son favorables.",hist_body2:"El astillero Eolo lleva años luchando por mantener la alta calidad de sus embarcaciones y la fórmula 100% Made in Italy. Tras 47 años de actividad, la familia Fortunato ha demostrado que es necesario apuntar a estándares cada vez más altos.",stat_years:"Años",stat_models:"Modelos",stat_made:"Made in Italy",fleet_eyebrow:"Colección Completa 2024",fleet_title_sub:"Diseño. Pasión. Mar.",fleet_desc:"Cada embarcación expresa el compromiso de Eolo con la excelencia artesanal italiana.",boat_tag_open:"Open · Coastal Cat. C",boat_tag_sport:"Open Deportivo · Recreativo",boat_tag_cabin:"Crucero Compacto · Cabina",boat_tag_versatile:"Versátil · Recreativo",boat_tag_premium:"Premium · Deportivo",boat_tag_luxury:"Flagship · Luxury · Premium",boat1_desc:"Embarcación open de 5,70 m para navegación ágil. Ideal para salidas en familia, combina ligereza, estabilidad y amplias zonas de solárium.",boat2_desc:"Diseño deportivo con distribución funcional. Ideal para recreación, pesca ligera y cruceros costeros. Hasta 8 personas y 150 CV.",boat3_desc:"Crucero compacto con cabina. Combina elegancia y confort en 6,40 m con solárium en proa y popa.",boat4_desc:"Embarcación de 6,90 m para navegación recreativa con hasta 7 personas. Casco equilibrado, amplias zonas de solárium y bañera funcional para salidas de día o cruceros costeros.",boat5_desc:"La Eolo 7.9 ofrece equilibrio entre deportividad, confort y elegancia. Amplia cubierta con gran solárium en proa y popa, cabina cuidada para escapadas de fin de semana y navegación suave y segura.",boat6_desc:"La Eolo Nove combina diseño italiano, espacio y prestaciones de alto nivel. Su casco en V profunda garantiza navegación estable y confortable, con amplia cubierta, gran zona exterior y cabina elegante para escapadas de varios días.",spec_length:"Eslora",spec_persons:"Personas",spec_engine:"Motor Máx.",spec_prop:"Propulsión",spec_cat:"Categoría",spec_fuel:"Combustible",spec_nav:"Navegación",spec_comm:"Comunicación",feat_comfort:"Confort & Funcionalidad",feat_deck:"Cubierta & Solar",feat_exterior:"Confort Exterior",feat_maneuver:"Gobierno & Maniobra",feat_extra:"Equipamiento Extra",feat_extra_opt:"Opciones Extra",feat_standard:"Equipamiento Standard",feat_tech_specs:"Características Técnicas",feat_interior:"Equipamiento Interior",feat_premium_options:"Opciones Premium",qr_label:"Catálogo PDF",qr_desc:"Escanea para ver la ficha técnica completa",qr_scan:"Escanear para descargar",qr_or:"O utiliza el botón de descarga directa",cat_eyebrow:"Catálogo Oficial · Eolo Marine 2024",cat_title:"Descarga el Catálogo<br><strong>Físico Completo</strong>",cat_desc:"Accede a la ficha técnica completa, lista de equipamientos, opciones de personalización y especificaciones de toda la flota Eolo en formato PDF.",catf_models:"6 modelos completos",catf_specs:"Especificaciones técnicas",catf_equip:"Listas de equipamiento",catf_custom:"Opciones personalización",cta_btn:"Descargar PDF",footer_tagline:"Ensure the best experience.",footer_models:"Modelos",footer_company:"Empresa",footer_catalog:"Catálogo PDF",footer_events:"News & Events",footer_copy:"© 2024 Eolo Marine · Familia Fortunato · Tutti i diritti riservati",fc_solar_proa:"Solárium proa",fc_seats_popa:"Asientos popa",fc_stair:"Escalera inox",fc_12v:"Toma 12V",fc_horn:"Bocina",fc_beige_cushions:"Cojinería beige",fc_solar_popa_ext:"Solárium popa ext.",fe_bimini_alum:"Bimini aluminio",fe_bimini_inox:"Bimini inox 3 arcos",fe_flexiteek:"Flexiteek",fe_sound:"Equipo sonido",fe_water:"Agua y ducha",fe_led:"Pack LED",fe_bilge:"Bomba achique",fd_ext_solar:"Extensión solárium popa",fd_bimini3:"Bimini inox 3 arcos",fd_bimini4:"Bimini inox 4 arcos",fd_cover:"Cubierta casco",fex_kitchen:"Cocina exterior",fex_fridge:"Nevera bañera",fex_sink:"Grifo/fregadero",fex_gas_cooker:"Cocina gas",fex_zipwake:"Flaps ZipWake",fex_sound4:"Sonido 4 altavoces",fm_hydro:"Dirección hidráulica",fm_winch:"Molinete eléctrico",fm_sound2:"Sonido 2 altavoces",fm_flaps:"Aletas eléctricas",fm_charger220:"Cargador 220V",fm_sound4:"Estéreo 4 altavoces",fm_flexiteek:"Plataforma Flexiteek",fo_bimini_inox:"Bimini inox 3/4 arcos",fo_flexiteek:"Plataforma Flexiteek",fo_hydraulic:"Dir. hidráulica",fo_winch:"Molinete eléctrico",fo_wc:"WC químico",fo_kitchen:"Cocina/fogón",fo_fridge:"Nevera bañera",fs_casco_blanco:"Casco blanco",fs_cojineria:"Cojinería beige",fs_solar_proa:"Solárium proa",fs_windshield:"Parabrisas inox",ft_eslora:"Eslora 8,30m",ft_manga:"Manga 2,55m",ft_peso:"Peso 1.800 kg",ft_motor400:"Motor hasta 400CV",ft_cat_c:"Categoría C",fi_double_bed:"Cama doble convertible proa",fi_aft_cabin:"Cabina aft 2 literas",fi_full_bath:"Baño completo",fi_sep_shower:"Ducha separada",fi_electric_wc:"WC eléctrico",fi_wood_floor:"Suelo laminado",fp_bow_thruster:"Hélice de proa",fp_auto_flaps:"Flaps automáticos",fp_ttop:"T-Top fibra vidrio",fp_aircon:"Aire acondicionado",fp_tv:"TV en cabina",fp_boiler:"Boiler 20L",fp_underwater_lights:"Luces subacuáticas"},
-en:{loading:"Loading",nav_history:"History",nav_fleet:"Fleet",nav_catalog:"Catalogue",nav_contact:"Contact",hero_eyebrow:"47 years · Made in Italy · Fortunato Family",hero_italic:"Excellence & Passion",hero_sub:"Italian Shipyard · Artisan Quality · Passion for the Sea",hero_btn_fleet:"Explore Fleet",hero_btn_catalog:"PDF Catalogue",scroll_hint:"Scroll",div_story:"Our Story",div_fleet:"The Fleet",div_catalog:"Official Catalogue",hist_label:"Italian Shipyard · Since 1977",hist_heading:"The story of those who<br><em>love the sea</em>",hist_body1:"Whoever loves the sea knows they must have two essential qualities: tenacity and perseverance. Because the sea can change every minute and the winds are not always favorable.",hist_body2:"The Eolo shipyard has been striving for years to maintain the high quality of its boats and the 100% Made in Italy formula. After 47 years, the Fortunato family has shown it is necessary to aim for ever higher standards of quality, professionalism and innovation.",stat_years:"Years",stat_models:"Models",stat_made:"Made in Italy",fleet_eyebrow:"Complete 2024 Collection",fleet_title_sub:"Design. Passion. Sea.",fleet_desc:"Each vessel expresses Eolo's commitment to Italian craftsmanship excellence and cutting-edge naval engineering.",boat_tag_open:"Open · Coastal Cat. C",boat_tag_sport:"Sport Open · Recreational",boat_tag_cabin:"Compact Cruiser · Cabin",boat_tag_versatile:"Versatile · Recreational",boat_tag_premium:"Day Cruiser · Premium",boat_tag_luxury:"Flagship · Luxury · Premium",boat1_desc:"5.70m open vessel for agile navigation. Perfect for family day trips, combining lightness, stability and wide sunbathing areas.",boat2_desc:"Sporty design with functional layout. Ideal for recreational outings, light fishing and coastal cruising. Up to 8 people and 150HP.",boat3_desc:"Compact cabin cruiser combining elegance and comfort in 6.40m with sunbathing areas fore and aft.",boat4_desc:"6.90m recreational vessel for up to 7 people. Wide sunbathing areas and versatile layout.",boat5_desc:"The Eolo 7.9 balances sportiness, comfort and elegance. It offers generous fore and aft sunpads, a refined cabin for weekend escapes, and smooth, stable navigation for family and leisure outings.",boat6_desc:"The Eolo Nove combines Italian design, space, and top-tier performance. Its deep-V hull delivers stable, comfortable navigation, while the large deck layout and elegant cabin make it ideal for stylish multi-day escapes.",spec_length:"Length",spec_persons:"Persons",spec_engine:"Max Engine",spec_prop:"Propulsion",spec_cat:"Category",spec_fuel:"Fuel Tank",spec_nav:"Navigation",spec_comm:"Communication",feat_comfort:"Comfort & Functionality",feat_deck:"Deck & Sun Protection",feat_exterior:"Exterior Comfort",feat_maneuver:"Steering & Maneuvering",feat_extra:"Extra Equipment",feat_extra_opt:"Optional Extras",feat_standard:"Standard Equipment",feat_tech_specs:"Technical Specs",feat_interior:"Interior Equipment",feat_premium_options:"Premium Options",qr_label:"PDF Catalogue",qr_desc:"Scan to view complete technical sheet",qr_scan:"Scan to download",qr_or:"Or use the direct download button",cat_eyebrow:"Official Catalogue · Eolo Marine 2024",cat_title:"Download the Complete<br><strong>Physical Catalogue</strong>",cat_desc:"Access complete technical sheets, equipment lists, customization options and full specifications for the entire Eolo fleet in high-quality PDF format.",catf_models:"6 complete models",catf_specs:"Technical specifications",catf_equip:"Equipment lists",catf_custom:"Customization options",cta_btn:"Download PDF",footer_tagline:"Ensure the best experience.",footer_models:"Models",footer_company:"Company",footer_catalog:"PDF Catalogue",footer_events:"News & Events",footer_copy:"© 2024 Eolo Marine · Fortunato Family · All rights reserved",fc_solar_proa:"Bow sunbathing",fc_seats_popa:"Stern seats",fc_stair:"Inox ladder",fc_12v:"12V socket",fc_horn:"Horn",fc_beige_cushions:"Beige cushions",fc_solar_popa_ext:"Extended stern solar",fe_bimini_alum:"Aluminium bimini",fe_bimini_inox:"3-arc inox bimini",fe_flexiteek:"Flexiteek platform",fe_sound:"Sound system",fe_water:"Water & shower",fe_led:"LED pack",fe_bilge:"Bilge pump",fd_ext_solar:"Extended stern solar",fd_bimini3:"3-arc inox bimini",fd_bimini4:"4-arc inox bimini",fd_cover:"Hull cover",fex_kitchen:"Exterior kitchen",fex_fridge:"Cockpit fridge",fex_sink:"Tap/sink",fex_gas_cooker:"Gas cooker",fex_zipwake:"ZipWake flaps",fex_sound4:"4-speaker stereo",fm_hydro:"Hydraulic steering",fm_winch:"Electric windlass",fm_sound2:"2-speaker audio",fm_flaps:"Electric flaps",fm_charger220:"220V charger",fm_sound4:"4-speaker stereo",fm_flexiteek:"Flexiteek platform",fo_bimini_inox:"Inox bimini 3/4 arcs",fo_flexiteek:"Flexiteek platform",fo_hydraulic:"Hydraulic steering",fo_winch:"Electric windlass",fo_wc:"Chemical toilet",fo_kitchen:"Stove/cooker",fo_fridge:"Cockpit fridge",fs_casco_blanco:"White hull",fs_cojineria:"Beige cushions",fs_solar_proa:"Bow sunbathing",fs_windshield:"Inox windshield",ft_eslora:"LOA 8.30m",ft_manga:"Beam 2.55m",ft_peso:"Weight 1,800 kg",ft_motor400:"Up to 400HP",ft_cat_c:"Category C",fi_double_bed:"Convertible double bow",fi_aft_cabin:"Aft cabin 2 bunks",fi_full_bath:"Full bathroom",fi_sep_shower:"Separate shower",fi_electric_wc:"Electric WC",fi_wood_floor:"Laminate floor",fp_bow_thruster:"Bow thruster",fp_auto_flaps:"Auto flaps",fp_ttop:"Fiberglass T-Top",fp_aircon:"Air conditioning",fp_tv:"Cabin TV",fp_boiler:"20L boiler",fp_underwater_lights:"Underwater lights"},
-it:{loading:"Caricamento",nav_history:"Storia",nav_fleet:"Flotta",nav_catalog:"Catalogo",nav_contact:"Contatti",hero_eyebrow:"47 anni · Made in Italy · Famiglia Fortunato",hero_italic:"Eccellenza & Passione",hero_sub:"Cantiere Italiano · Qualità Artigianale · Passione per il Mare",hero_btn_fleet:"Esplora la Flotta",hero_btn_catalog:"Catalogo PDF",scroll_hint:"Scorri",div_story:"La Nostra Storia",div_fleet:"La Flotta",div_catalog:"Catalogo Ufficiale",hist_label:"Cantiere Italiano · Dal 1977",hist_heading:"La storia di chi<br><em>ama il mare</em>",hist_body1:"Chi ama il mare sa che deve avere due qualità essenziali: tenacia e perseveranza. Il mare può cambiare ogni minuto e i venti non sono sempre favorevoli.",hist_body2:"Il cantiere Eolo lotta da anni per mantenere l'alta qualità delle sue imbarcazioni e la formula 100% Made in Italy. Dopo 47 anni, la famiglia Fortunato ha dimostrato la necessità di puntare sempre più in alto.",stat_years:"Anni",stat_models:"Modelli",stat_made:"Made in Italy",fleet_eyebrow:"Collezione Completa 2024",fleet_title_sub:"Design. Passione. Mare.",fleet_desc:"Ogni imbarcazione esprime l'impegno di Eolo verso l'eccellenza artigianale italiana.",boat_tag_open:"Open · Cat. Costiera C",boat_tag_sport:"Open Sportivo · Ricreativo",boat_tag_cabin:"Cruiser Compatto · Cabina",boat_tag_versatile:"Versatile · Ricreativo",boat_tag_premium:"Day Cruiser · Premium",boat_tag_luxury:"Ammiraglia · Lusso · Premium",boat1_desc:"Imbarcazione open da 5,70 m per navigazione agile. Ideale per uscite familiari con ampie zone solarium.",boat2_desc:"Design sportivo e funzionale. Per uscite ricreative e crociere costiere fino a 8 persone e 150 CV.",boat3_desc:"Cruiser compatto con cabina. Eleganza e comfort in 6,40 m con solarium prua e poppa.",boat4_desc:"6,90 m per navigazione ricreativa con fino a 7 persone. Ampie zone solarium e layout versatile.",boat5_desc:"La Eolo 7.9 offre un perfetto equilibrio tra sportivita, comfort ed eleganza. Ampi prendisole a prua e poppa, cabina curata per weekend in mare e navigazione fluida e stabile.",boat6_desc:"La Eolo Nove unisce design italiano, spazio e prestazioni di alto livello. La carena a V profonda assicura una navigazione stabile e confortevole, con ampi spazi esterni e cabina elegante per crociere di piu giorni.",spec_length:"Lunghezza",spec_persons:"Persone",spec_engine:"Motore Max",spec_prop:"Propulsione",spec_cat:"Categoria",spec_fuel:"Serbatoio",spec_nav:"Navigazione",spec_comm:"Comunicazione",feat_comfort:"Comfort & Funzionalità",feat_deck:"Coperta & Solare",feat_exterior:"Comfort Esterno",feat_maneuver:"Governo & Manovra",feat_extra:"Equipaggiamento Extra",feat_extra_opt:"Opzioni Extra",feat_standard:"Equipaggiamento Standard",feat_tech_specs:"Caratteristiche Tecniche",feat_interior:"Equipaggiamento Interno",feat_premium_options:"Opzioni Premium",qr_label:"Catalogo PDF",qr_desc:"Scansiona per la scheda tecnica completa",qr_scan:"Scansiona per scaricare",qr_or:"O usa il pulsante di download",cat_eyebrow:"Catalogo Ufficiale · Eolo Marine 2024",cat_title:"Scarica il Catalogo<br><strong>Fisico Completo</strong>",cat_desc:"Accedi alle schede tecniche complete, liste equipaggiamenti, opzioni di personalizzazione di tutta la flotta Eolo in PDF.",catf_models:"6 modelli completi",catf_specs:"Specifiche tecniche",catf_equip:"Liste equipaggiamenti",catf_custom:"Opzioni personalizzazione",cta_btn:"Scarica PDF",footer_tagline:"Ensure the best experience.",footer_models:"Modelli",footer_company:"Azienda",footer_catalog:"Catalogo PDF",footer_events:"News & Events",footer_copy:"© 2024 Eolo Marine · Famiglia Fortunato · Tutti i diritti riservati"},
-de:{loading:"Laden",nav_history:"Geschichte",nav_fleet:"Flotte",nav_catalog:"Katalog",nav_contact:"Kontakt",hero_eyebrow:"47 Jahre · Made in Italy · Familie Fortunato",hero_italic:"Exzellenz & Leidenschaft",hero_sub:"Italienische Werft · Handwerksqualität · Meeresbegeisterung",hero_btn_fleet:"Flotte Erkunden",hero_btn_catalog:"PDF-Katalog",scroll_hint:"Scrollen",div_story:"Unsere Geschichte",div_fleet:"Die Flotte",div_catalog:"Offizieller Katalog",hist_label:"Italienische Werft · Seit 1977",hist_heading:"Die Geschichte derer,<br><em>die das Meer lieben</em>",hist_body1:"Wer das Meer liebt, braucht zwei wesentliche Eigenschaften: Beharrlichkeit und Ausdauer. Das Meer ändert sich jede Minute und der Wind ist nicht immer günstig.",hist_body2:"Die Werft Eolo kämpft seit Jahren für die hohe Qualität ihrer Boote und die Formel 100% Made in Italy. Nach 47 Jahren hat Familie Fortunato bewiesen, dass immer höhere Standards notwendig sind.",stat_years:"Jahre",stat_models:"Modelle",stat_made:"Made in Italy",fleet_eyebrow:"Vollständige Kollektion 2024",fleet_title_sub:"Design. Leidenschaft. Meer.",fleet_desc:"Jedes Boot drückt Eolos Engagement für italienische Handwerksexzellenz aus.",boat_tag_open:"Open · Küste Kat. C",boat_tag_sport:"Sport Open · Freizeit",boat_tag_cabin:"Kompakter Kreuzer · Kabine",boat_tag_versatile:"Vielseitig · Freizeit",boat_tag_premium:"Day Cruiser · Premium",boat_tag_luxury:"Flaggschiff · Luxus · Premium",boat1_desc:"5,70m Open-Boot für agile Navigation. Ideal für Familienausflüge mit großen Sonnendeckbereichen.",boat2_desc:"Sportliches Design für Freizeitausflüge und Küstenkreuzfahrten. Bis zu 8 Personen und 150 PS.",boat3_desc:"Kompakter Kabinen-Kreuzer mit Eleganz auf 6,40m und Sonnendeck vorne und hinten.",boat4_desc:"6,90m für Freizeitnavigation mit bis zu 7 Personen. Große Sonnendeckbereiche und vielseitiges Layout.",boat5_desc:"Die Eolo 7.9 bietet die perfekte Balance aus Sportlichkeit, Komfort und Eleganz. Grosse Sonnenflachen vorn und achtern, eine hochwertige Kabine fur Wochenendtrips und ruhige, stabile Fahreigenschaften.",boat6_desc:"Die Eolo Nove vereint italienisches Design, Raumangebot und Spitzenleistung. Der tiefe V-Rumpf sorgt fur stabile, komfortable Fahrt, wahrend das grosszugige Deck und die elegante Kabine perfekt fur stilvolle Mehrtagestorns sind.",spec_length:"Länge",spec_persons:"Personen",spec_engine:"Max Motor",spec_prop:"Antrieb",spec_cat:"Kategorie",spec_fuel:"Kraftstoff",spec_nav:"Navigation",spec_comm:"Kommunikation",feat_comfort:"Komfort & Funktionalität",feat_deck:"Deck & Sonnenschutz",feat_exterior:"Außenkomfort",feat_maneuver:"Steuerung & Manöver",feat_extra:"Zusatzausstattung",feat_extra_opt:"Optionale Extras",feat_standard:"Standardausstattung",feat_tech_specs:"Technische Daten",feat_interior:"Innenausstattung",feat_premium_options:"Premium-Optionen",qr_label:"PDF-Katalog",qr_desc:"Scannen für vollständiges Datenblatt",qr_scan:"Zum Herunterladen scannen",qr_or:"Oder Download-Taste verwenden",cat_eyebrow:"Offizieller Katalog · Eolo Marine 2024",cat_title:"Vollständigen Katalog<br><strong>Herunterladen</strong>",cat_desc:"Technische Datenblätter, Ausstattungslisten und Spezifikationen für die gesamte Eolo-Flotte als PDF.",catf_models:"6 vollständige Modelle",catf_specs:"Technische Daten",catf_equip:"Ausstattungslisten",catf_custom:"Anpassungsoptionen",cta_btn:"PDF Herunterladen",footer_tagline:"Ensure the best experience.",footer_models:"Modelle",footer_company:"Unternehmen",footer_catalog:"PDF-Katalog",footer_events:"News & Events",footer_copy:"© 2024 Eolo Marine · Familie Fortunato · Alle Rechte vorbehalten"},
-fr:{loading:"Chargement",nav_history:"Histoire",nav_fleet:"Flotte",nav_catalog:"Catalogue",nav_contact:"Contact",hero_eyebrow:"47 ans · Made in Italy · Famille Fortunato",hero_italic:"Excellence & Passion",hero_sub:"Chantier Naval Italien · Qualité Artisanale · Passion de la Mer",hero_btn_fleet:"Explorer la Flotte",hero_btn_catalog:"Catalogue PDF",scroll_hint:"Défiler",div_story:"Notre Histoire",div_fleet:"La Flotte",div_catalog:"Catalogue Officiel",hist_label:"Chantier Naval Italien · Depuis 1977",hist_heading:"L'histoire de ceux qui<br><em>aiment la mer</em>",hist_body1:"Celui qui aime la mer sait qu'il doit avoir deux qualités essentielles: ténacité et persévérance. La mer peut changer à chaque instant et les vents ne sont pas toujours favorables.",hist_body2:"Le chantier naval Eolo lutte depuis des années pour maintenir la haute qualité de ses bateaux et la formule 100% Made in Italy. Après 47 ans, la famille Fortunato a démontré la nécessité de viser des standards toujours plus élevés.",stat_years:"Ans",stat_models:"Modèles",stat_made:"Made in Italy",fleet_eyebrow:"Collection Complète 2024",fleet_title_sub:"Design. Passion. Mer.",fleet_desc:"Chaque embarcation exprime l'engagement d'Eolo envers l'excellence artisanale italienne.",boat_tag_open:"Open · Cat. Côtière C",boat_tag_sport:"Open Sportif · Loisirs",boat_tag_cabin:"Croiseur Compact · Cabine",boat_tag_versatile:"Polyvalent · Loisirs",boat_tag_premium:"Day Cruiser · Premium",boat_tag_luxury:"Amiral · Luxe · Premium",boat1_desc:"Bateau open de 5,70m pour navigation agile. Idéal pour sorties familiales avec grandes zones de bain de soleil.",boat2_desc:"Design sportif et fonctionnel. Pour loisirs et croisières côtières. Jusqu'à 8 personnes et 150CV.",boat3_desc:"Croiseur compact à cabine alliant élégance en 6,40m avec solarium avant et arrière.",boat4_desc:"6,90m pour navigation de loisirs jusqu'à 7 personnes. Grandes zones de bain de soleil.",boat5_desc:"La Eolo 7.9 offre un equilibre parfait entre sportivite, confort et elegance. Grands bains de soleil avant et arriere, cabine soignee pour les week-ends en mer et navigation douce et stable.",boat6_desc:"La Eolo Nove combine design italien, espace et performances haut de gamme. Sa carene en V profonde assure une navigation stable et confortable, avec une large zone de pont et une cabine elegante pour des escapades de plusieurs jours.",spec_length:"Longueur",spec_persons:"Personnes",spec_engine:"Moteur Max",spec_prop:"Propulsion",spec_cat:"Catégorie",spec_fuel:"Carburant",spec_nav:"Navigation",spec_comm:"Communication",feat_comfort:"Confort & Fonctionnalité",feat_deck:"Pont & Solare",feat_exterior:"Confort Extérieur",feat_maneuver:"Gouverne & Manœuvre",feat_extra:"Équipement Supplémentaire",feat_extra_opt:"Options Supplémentaires",feat_standard:"Équipement Standard",feat_tech_specs:"Caractéristiques Techniques",feat_interior:"Équipement Intérieur",feat_premium_options:"Options Premium",qr_label:"Catalogue PDF",qr_desc:"Scanner pour la fiche technique complète",qr_scan:"Scanner pour télécharger",qr_or:"Ou utiliser le bouton de téléchargement",cat_eyebrow:"Catalogue Officiel · Eolo Marine 2024",cat_title:"Télécharger le Catalogue<br><strong>Physique Complet</strong>",cat_desc:"Fiches techniques, listes d'équipements et spécifications de toute la flotte Eolo en PDF haute qualité.",catf_models:"6 modèles complets",catf_specs:"Spécifications techniques",catf_equip:"Listes d'équipements",catf_custom:"Options de personnalisation",cta_btn:"Télécharger PDF",footer_tagline:"Ensure the best experience.",footer_models:"Modèles",footer_company:"Entreprise",footer_catalog:"Catalogue PDF",footer_events:"Actualités",footer_copy:"© 2024 Eolo Marine · Famille Fortunato · Tous droits réservés"}};
+// ── TRANSLATIONS ──────────────────────────────────────────
+const T={
+es:{loading:"Cargando",nav_history:"Historia",nav_fleet:"Flota",nav_catalog:"Catálogo",nav_contact:"Contacto",hero_ey:"47 años · Made in Italy · Familia Fortunato",hero_it:"Excellence & Passion",hero_sub:"Astillero Italiano · Calidad Artesanal · Pasión por el Mar",hero_f:"Explorar Flota",hero_c:"Catálogo PDF",scroll:"Scroll",d_hist:"Nuestra Historia",d_fleet:"La Flota",d_cat:"Catálogo Oficial",hl:"Astillero Italiano · Desde 1977",hh:"La historia de quienes<br><em>aman el mar</em>",hb1:"Quien ama el mar sabe que debe tener dos cualidades esenciales: tenacidad y perseverancia. Porque el mar puede cambiar cada minuto y los vientos no siempre son favorables.",hb2:"El astillero Eolo lleva años luchando por mantener la alta calidad de sus embarcaciones y la fórmula 100% Made in Italy. Tras 47 años, la familia Fortunato ha demostrado que es necesario apuntar a estándares cada vez más altos.",sy:"Años",sm:"Modelos",ls1:"Diseñados para vivir el mar",ls2:"100% Made in Italy · 47 anni",fey:"Colección Completa 2024",fsub:"Diseño. Pasión. Mar.",fdes:"Cada embarcación expresa el compromiso de Eolo con la excelencia artesanal italiana.",b1tag:"Open · Costera Cat. C · 5.70m",b1desc:"Open de 5,70 m para navegación ágil y deportiva. Consola central, grandes soláriums, hasta 7 personas. Estilo mediterráneo con rendimiento y maniobrabilidad excepcionales.",b2tag:"Open Deportivo · Recreativo · 6.40m",b2desc:"Open de 6,40 m con diseño deportivo, amplio solárium y capacidad para 8 personas. Ideal para salidas recreativas, pesca ligera y cruceros costeros. Fueraborda hasta 150 CV.",b3tag:"Crucero Compacto · Cabina · 6.40m",b3desc:"Crucero compacto con cabina que combina elegancia y funcionalidad en 6,40 m. Amplios soláriums en proa y popa, distribución versátil para hasta 7 personas.",b4tag:"Versátil · Recreativo · 6.90m",b4desc:"6,90 m pensada para navegación recreativa con hasta 7 personas. Amplias zonas de solárium y distribución versátil para salidas de día o cruceros de fin de semana.",b5tag:"Day Cruiser Premium · 8.30m",b5desc:"Cabina equipada con estufa, fregadero, nevera, inodoro y cama doble. Diseño deportivo con elegancia. Manga 2,55 m · Peso 1.800 kg · Categoría C.",b6tag:"Flagship · Luxury · Premium",b6desc:"El máximo nivel de la gama. Carena en V profunda, cabina doble, cabina aft con literas y baño completo con ducha separada. Potente, versátil y refinada.",spec_l:"Eslora",spec_p:"Personas",spec_e:"Motor Máx.",spec_pr:"Propulsión",spec_c:"Categoría",spec_fu:"Combustible",spec_na:"Navegación",spec_co:"Comunicación",a_std:"Equipamiento Standard",a_ext:"Opciones Extra",a_tech:"Características Técnicas",a_int:"Equipamiento Interior",a_prem:"Opciones Premium",ql:"Catálogo PDF",qd:"Escanea para la ficha técnica completa",catey:"Catálogo Oficial · Eolo Marine 2024",cattl:"Descarga el Catálogo<br><strong>Físico Completo</strong>",catd:"Accede a las fichas técnicas completas, listas de equipamientos, opciones de personalización y especificaciones de toda la flota Eolo en formato PDF.",cf1:"6 modelos completos",cf2:"Especificaciones técnicas",cf3:"Listas de equipamiento",cf4:"Opciones personalización",cta:"Descargar PDF",qscan:"Escanear para descargar",fm:"Modelos",fc:"Empresa",fcp:"© 2024 Eolo Marine · Familia Fortunato · Tutti i diritti riservati"},
+en:{loading:"Loading",nav_history:"History",nav_fleet:"Fleet",nav_catalog:"Catalogue",nav_contact:"Contact",hero_ey:"47 years · Made in Italy · Fortunato Family",hero_it:"Excellence & Passion",hero_sub:"Italian Shipyard · Artisan Quality · Passion for the Sea",hero_f:"Explore Fleet",hero_c:"PDF Catalogue",scroll:"Scroll",d_hist:"Our Story",d_fleet:"The Fleet",d_cat:"Official Catalogue",hl:"Italian Shipyard · Since 1977",hh:"The story of those who<br><em>love the sea</em>",hb1:"Whoever loves the sea knows they must have two essential qualities: tenacity and perseverance. Because the sea can change every minute and the winds are not always favorable.",hb2:"The Eolo shipyard has been striving for years to maintain the high quality of its boats and the 100% Made in Italy formula. After 47 years, the Fortunato family has shown it is necessary to aim for ever higher standards.",sy:"Years",sm:"Models",ls1:"Designed to live the sea",ls2:"100% Made in Italy · 47 anni",fey:"Complete 2024 Collection",fsub:"Design. Passion. Sea.",fdes:"Each vessel expresses Eolo's commitment to Italian craftsmanship excellence.",b1tag:"Open · Coastal Cat. C · 5.70m",b1desc:"5.70m open vessel for agile, sporty navigation. Central console, large sunbathing areas, up to 7 people. Mediterranean style with exceptional performance and handling.",b2tag:"Sport Open · Recreational · 6.40m",b2desc:"6.40m open with sporty design, wide sunbathing areas and capacity for 8 people. Ideal for recreational outings, light fishing and coastal cruising. Up to 150HP outboard.",b3tag:"Compact Cruiser · Cabin · 6.40m",b3desc:"Compact cabin cruiser combining elegance and functionality in 6.40m. Wide sunbathing areas fore and aft, versatile layout for up to 7 people.",b4tag:"Versatile · Recreational · 6.90m",b4desc:"6.90m vessel for recreational navigation with up to 7 people. Wide sunbathing areas and versatile layout for day trips or weekend coastal cruises.",b5tag:"Premium Day Cruiser · 8.30m",b5desc:"Full cabin with stove, sink, fridge, toilet and double bed. Sporty design with elegance. Beam 2.55m · Weight 1,800kg · Category C.",b6tag:"Flagship · Luxury · Premium",b6desc:"The highest level in the range. Deep V-hull, double cabin, aft cabin with bunks and full bathroom with separate shower. Powerful, versatile and refined.",spec_l:"Length",spec_p:"Persons",spec_e:"Max Engine",spec_pr:"Propulsion",spec_c:"Category",spec_fu:"Fuel Tank",spec_na:"Navigation",spec_co:"Communication",a_std:"Standard Equipment",a_ext:"Optional Extras",a_tech:"Technical Specs",a_int:"Interior Equipment",a_prem:"Premium Options",ql:"PDF Catalogue",qd:"Scan to view complete technical sheet",catey:"Official Catalogue · Eolo Marine 2024",cattl:"Download the Complete<br><strong>Physical Catalogue</strong>",catd:"Access complete technical sheets, equipment lists, customization options and specifications for the entire Eolo fleet in high-quality PDF format.",cf1:"6 complete models",cf2:"Technical specifications",cf3:"Equipment lists",cf4:"Customization options",cta:"Download PDF",qscan:"Scan to download",fm:"Models",fc:"Company",fcp:"© 2024 Eolo Marine · Fortunato Family · All rights reserved"},
+it:{loading:"Caricamento",nav_history:"Storia",nav_fleet:"Flotta",nav_catalog:"Catalogo",nav_contact:"Contatti",hero_ey:"47 anni · Made in Italy · Famiglia Fortunato",hero_it:"Eccellenza & Passione",hero_sub:"Cantiere Italiano · Qualità Artigianale · Passione per il Mare",hero_f:"Esplora la Flotta",hero_c:"Catalogo PDF",scroll:"Scorri",d_hist:"La Nostra Storia",d_fleet:"La Flotta",d_cat:"Catalogo Ufficiale",hl:"Cantiere Italiano · Dal 1977",hh:"La storia di chi<br><em>ama il mare</em>",hb1:"Chi ama il mare sa che deve avere due qualità essenziali: tenacia e perseveranza. Il mare può cambiare ogni minuto e i venti non sono sempre favorevoli.",hb2:"Il cantiere Eolo lotta da anni per mantenere l'alta qualità delle sue imbarcazioni e la formula 100% Made in Italy. Dopo 47 anni, la famiglia Fortunato ha dimostrato la necessità di puntare sempre più in alto.",sy:"Anni",sm:"Modelli",ls1:"Progettate per vivere il mare",ls2:"100% Made in Italy · 47 anni",fey:"Collezione Completa 2024",fsub:"Design. Passione. Mare.",fdes:"Ogni imbarcazione esprime l'impegno di Eolo verso l'eccellenza artigianale italiana.",b1tag:"Open · Cat. Costiera C · 5.70m",b1desc:"Open da 5,70 m per navigazione agile e sportiva. Consolle centrale, grandi zone solarium, fino a 7 persone. Stile mediterraneo con prestazioni eccezionali.",b2tag:"Open Sportivo · Ricreativo · 6.40m",b2desc:"Open da 6,40 m con design sportivo, ampio solarium e capacità per 8 persone. Ideale per uscite ricreative, pesca leggera e crociere costiere. Fino a 150 CV.",b3tag:"Cruiser Compatto · Cabina · 6.40m",b3desc:"Cruiser compatto con cabina che unisce eleganza e funzionalità in 6,40 m. Ampli solarium a prua e poppa, distribuzione versatile per 7 persone.",b4tag:"Versatile · Ricreativo · 6.90m",b4desc:"6,90 m per navigazione ricreativa con fino a 7 persone. Ampie zone solarium e distribuzione versatile per uscite o crociere del fine settimana.",b5tag:"Day Cruiser Premium · 8.30m",b5desc:"Cabina completa con cucina, lavandino, frigorifero, WC e letto matrimoniale. Design sportivo con eleganza. Larghezza 2,55 m · Peso 1.800 kg · Categoria C.",b6tag:"Ammiraglia · Lusso · Premium",b6desc:"Il massimo della gamma. Carena a V profonda, cabina doppia, cabina aft con cuccette e bagno completo con doccia separata. Potente, versatile e raffinata.",spec_l:"Lunghezza",spec_p:"Persone",spec_e:"Motore Max",spec_pr:"Propulsione",spec_c:"Categoria",spec_fu:"Serbatoio",spec_na:"Navigazione",spec_co:"Comunicazione",a_std:"Equipaggiamento Standard",a_ext:"Opzioni Extra",a_tech:"Caratteristiche Tecniche",a_int:"Equipaggiamento Interno",a_prem:"Opzioni Premium",ql:"Catalogo PDF",qd:"Scansiona per la scheda tecnica completa",catey:"Catalogo Ufficiale · Eolo Marine 2024",cattl:"Scarica il Catalogo<br><strong>Fisico Completo</strong>",catd:"Accedi alle schede tecniche complete, liste equipaggiamenti e opzioni di personalizzazione di tutta la flotta Eolo in PDF.",cf1:"6 modelli completi",cf2:"Specifiche tecniche",cf3:"Liste equipaggiamenti",cf4:"Opzioni personalizzazione",cta:"Scarica PDF",qscan:"Scansiona per scaricare",fm:"Modelli",fc:"Azienda",fcp:"© 2024 Eolo Marine · Famiglia Fortunato · Tutti i diritti riservati"},
+de:{loading:"Laden",nav_history:"Geschichte",nav_fleet:"Flotte",nav_catalog:"Katalog",nav_contact:"Kontakt",hero_ey:"47 Jahre · Made in Italy · Familie Fortunato",hero_it:"Exzellenz & Leidenschaft",hero_sub:"Italienische Werft · Handwerksqualität · Meeresbegeisterung",hero_f:"Flotte Erkunden",hero_c:"PDF-Katalog",scroll:"Scrollen",d_hist:"Unsere Geschichte",d_fleet:"Die Flotte",d_cat:"Offizieller Katalog",hl:"Italienische Werft · Seit 1977",hh:"Die Geschichte derer,<br><em>die das Meer lieben</em>",hb1:"Wer das Meer liebt, braucht zwei wesentliche Eigenschaften: Beharrlichkeit und Ausdauer. Das Meer ändert sich jede Minute.",hb2:"Die Werft Eolo kämpft seit Jahren für die hohe Qualität ihrer Boote und die Formel 100% Made in Italy. Nach 47 Jahren hat Familie Fortunato bewiesen, dass immer höhere Standards notwendig sind.",sy:"Jahre",sm:"Modelle",ls1:"Für das Leben auf dem Meer konzipiert",ls2:"100% Made in Italy · 47 anni",fey:"Vollständige Kollektion 2024",fsub:"Design. Leidenschaft. Meer.",fdes:"Jedes Boot drückt Eolos Engagement für italienische Handwerksexzellenz aus.",b1tag:"Open · Küste Kat. C · 5,70m",b1desc:"5,70m Open-Boot für agile Navigation. Mittelkonsole, große Sonnendeckbereiche, bis zu 7 Personen. Mediterraner Stil mit außergewöhnlicher Leistung.",b2tag:"Sport Open · Freizeit · 6,40m",b2desc:"6,40m Open mit sportlichem Design, breitem Sonnendeck und 8 Personen. Ideal für Freizeitausflüge und Küstenkreuzfahrten. Bis zu 150 PS.",b3tag:"Kompakter Kreuzer · Kabine · 6,40m",b3desc:"Kompakter Kabinen-Kreuzer in 6,40m. Breite Sonnendeckbereiche vorne und hinten, vielseitiges Layout für 7 Personen.",b4tag:"Vielseitig · Freizeit · 6,90m",b4desc:"6,90m für Freizeitnavigation mit bis zu 7 Personen. Große Sonnendeckbereiche für Tagesausflüge oder Wochenendkreuzfahrten.",b5tag:"Premium Day Cruiser · 8,30m",b5desc:"Vollständige Kabine mit Herd, Spüle, Kühlschrank, Toilette und Doppelbett. Sportliches Design. Breite 2,55m · Gewicht 1.800kg · Kategorie C.",b6tag:"Flaggschiff · Luxus · Premium",b6desc:"Höchstes Niveau. Tiefer V-Rumpf, Doppelkabine, Heckkabine mit Kojen und vollständiges Bad mit separater Dusche. Leistungsstark und raffiniert.",spec_l:"Länge",spec_p:"Personen",spec_e:"Max Motor",spec_pr:"Antrieb",spec_c:"Kategorie",spec_fu:"Kraftstoff",spec_na:"Navigation",spec_co:"Kommunikation",a_std:"Standardausstattung",a_ext:"Optionale Extras",a_tech:"Technische Daten",a_int:"Innenausstattung",a_prem:"Premium-Optionen",ql:"PDF-Katalog",qd:"Scannen für vollständiges Datenblatt",catey:"Offizieller Katalog · Eolo Marine 2024",cattl:"Vollständigen Katalog<br><strong>Herunterladen</strong>",catd:"Technische Datenblätter, Ausstattungslisten und Spezifikationen für die gesamte Eolo-Flotte als PDF.",cf1:"6 vollständige Modelle",cf2:"Technische Daten",cf3:"Ausstattungslisten",cf4:"Anpassungsoptionen",cta:"PDF Herunterladen",qscan:"Zum Herunterladen scannen",fm:"Modelle",fc:"Unternehmen",fcp:"© 2024 Eolo Marine · Familie Fortunato · Alle Rechte vorbehalten"},
+fr:{loading:"Chargement",nav_history:"Histoire",nav_fleet:"Flotte",nav_catalog:"Catalogue",nav_contact:"Contact",hero_ey:"47 ans · Made in Italy · Famille Fortunato",hero_it:"Excellence & Passion",hero_sub:"Chantier Naval Italien · Qualité Artisanale · Passion de la Mer",hero_f:"Explorer la Flotte",hero_c:"Catalogue PDF",scroll:"Défiler",d_hist:"Notre Histoire",d_fleet:"La Flotte",d_cat:"Catalogue Officiel",hl:"Chantier Naval Italien · Depuis 1977",hh:"L'histoire de ceux qui<br><em>aiment la mer</em>",hb1:"Celui qui aime la mer sait qu'il doit avoir deux qualités essentielles: ténacité et persévérance. La mer peut changer à chaque instant.",hb2:"Le chantier naval Eolo lutte depuis des années pour maintenir la haute qualité de ses bateaux. Après 47 ans, la famille Fortunato a démontré la nécessité de viser des standards toujours plus élevés.",sy:"Ans",sm:"Modèles",ls1:"Conçus pour vivre la mer",ls2:"100% Made in Italy · 47 anni",fey:"Collection Complète 2024",fsub:"Design. Passion. Mer.",fdes:"Chaque embarcation exprime l'engagement d'Eolo envers l'excellence artisanale italienne.",b1tag:"Open · Cat. Côtière C · 5,70m",b1desc:"Open de 5,70 m pour navigation agile et sportive. Console centrale, grandes zones de bain de soleil, jusqu'à 7 personnes. Style méditerranéen.",b2tag:"Open Sportif · Loisirs · 6,40m",b2desc:"Open de 6,40 m au design sportif, large solarium et 8 personnes. Idéal pour loisirs, pêche légère et croisières côtières. Jusqu'à 150CV.",b3tag:"Croiseur Compact · Cabine · 6,40m",b3desc:"Croiseur compact à cabine alliant élégance et fonctionnalité en 6,40 m. Larges soláriums à l'avant et à l'arrière pour 7 personnes.",b4tag:"Polyvalent · Loisirs · 6,90m",b4desc:"6,90 m pour navigation de loisirs jusqu'à 7 personnes. Larges zones de bain de soleil pour sorties ou croisières du week-end.",b5tag:"Day Cruiser Premium · 8,30m",b5desc:"Cabine complète avec cuisinière, évier, réfrigérateur, WC et lit double. Design sportif et élégant. Largeur 2,55m · Poids 1.800kg · Catégorie C.",b6tag:"Amiral · Luxe · Premium",b6desc:"Le niveau le plus élevé. Carène en V profonde, cabine double, cabine arrière et salle de bain complète avec douche séparée. Puissant et raffiné.",spec_l:"Longueur",spec_p:"Personnes",spec_e:"Moteur Max",spec_pr:"Propulsion",spec_c:"Catégorie",spec_fu:"Carburant",spec_na:"Navigation",spec_co:"Communication",a_std:"Équipement Standard",a_ext:"Options Supplémentaires",a_tech:"Caractéristiques Techniques",a_int:"Équipement Intérieur",a_prem:"Options Premium",ql:"Catalogue PDF",qd:"Scanner pour la fiche technique complète",catey:"Catalogue Officiel · Eolo Marine 2024",cattl:"Télécharger le Catalogue<br><strong>Physique Complet</strong>",catd:"Fiches techniques, listes d'équipements et spécifications de toute la flotte Eolo en PDF haute qualité.",cf1:"6 modèles complets",cf2:"Spécifications techniques",cf3:"Listes d'équipements",cf4:"Options de personnalisation",cta:"Télécharger PDF",qscan:"Scanner pour télécharger",fm:"Modèles",fc:"Entreprise",fcp:"© 2024 Eolo Marine · Famille Fortunato · Tous droits réservés"}
+};
 
 function setLang(l){
-  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase()===l));
+  document.querySelectorAll('.lbtn').forEach(b=>b.classList.toggle('on',b.textContent.toLowerCase()===l));
   document.querySelectorAll('[data-i18n]').forEach(el=>{
     const k=el.getAttribute('data-i18n'),v=(T[l]||T.es)[k]||T.es[k]||k;
-    if(['hist_heading','cat_title'].includes(k)) el.innerHTML=v; else el.textContent=v;
+    if(['hh','cattl'].includes(k))el.innerHTML=v; else el.textContent=v;
   });
 }
 
-// CAROUSEL
+// ── CAROUSEL ───────────────────────────────────────────────
 let cur=0;
-function updateCar(){
-  document.getElementById('fleetTrack').style.transform=`translateX(-${cur*100}vw)`;
-  document.querySelectorAll('.fdot').forEach((d,i)=>d.classList.toggle('active',i===cur));
-  document.querySelectorAll('.pill').forEach((p,i)=>p.classList.toggle('active',i===cur));
+function upd(){
+  document.getElementById('track').style.transform=`translateX(-${cur*100}vw)`;
+  document.querySelectorAll('.fd').forEach((d,i)=>d.classList.toggle('on',i===cur));
+  document.querySelectorAll('.pill').forEach((p,i)=>p.classList.toggle('on',i===cur));
 }
-function nextBoat(){cur=(cur+1)%6;updateCar();}
-function prevBoat(){cur=(cur-1+6)%6;updateCar();}
-function goToBoat(n){cur=n;updateCar();}
-document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')nextBoat();if(e.key==='ArrowLeft')prevBoat();});
+function nxt(){cur=(cur+1)%6;upd();}
+function prev(){cur=(cur-1+6)%6;upd();}
+function go(n){cur=n;upd();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')nxt();if(e.key==='ArrowLeft')prev();});
 let tx=0;
-document.getElementById('fleetTrack').addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
-document.getElementById('fleetTrack').addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50)d<0?nextBoat():prevBoat();},{passive:true});
+document.getElementById('track').addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
+document.getElementById('track').addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50)d<0?nxt():prev();},{passive:true});
 
-// ACCORDION
+// ── ACCORDION ──────────────────────────────────────────────
 function ta(h){
-  const b=h.nextElementSibling,i=h.querySelector('.ai'),o=b.classList.contains('open');
-  h.closest('.bi').querySelectorAll('.ab').forEach(x=>x.classList.remove('open'));
-  h.closest('.bi').querySelectorAll('.ai').forEach(x=>x.classList.remove('open'));
-  if(!o){b.classList.add('open');i.classList.add('open');}
+  const b=h.nextElementSibling,i=h.querySelector('.ai'),o=b.classList.contains('op');
+  h.closest('.bcr').querySelectorAll('.ab').forEach(x=>x.classList.remove('op'));
+  h.closest('.bcr').querySelectorAll('.ai').forEach(x=>x.classList.remove('op'));
+  if(!o){b.classList.add('op');i.classList.add('op');}
 }
 
-// CURSOR
-const c$=document.getElementById('cursor'),r$=document.getElementById('cursorRing');
+// ── CURSOR ─────────────────────────────────────────────────
+const c$=document.getElementById('cur'),r$=document.getElementById('ring');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;c$.style.left=mx+'px';c$.style.top=my+'px';});
-(function a(){rx+=(mx-rx)*0.11;ry+=(my-ry)*0.11;r$.style.left=rx+'px';r$.style.top=ry+'px';requestAnimationFrame(a);})();
+(function a(){rx+=(mx-rx)*.11;ry+=(my-ry)*.11;r$.style.left=rx+'px';r$.style.top=ry+'px';requestAnimationFrame(a);})();
 document.querySelectorAll('button,a,[onclick]').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{r$.style.width='52px';r$.style.height='52px';r$.style.borderColor='rgba(200,169,110,0.85)';});
-  el.addEventListener('mouseleave',()=>{r$.style.width='38px';r$.style.height='38px';r$.style.borderColor='rgba(200,169,110,0.45)';});
+  el.addEventListener('mouseenter',()=>{r$.style.width='50px';r$.style.height='50px';r$.style.borderColor='rgba(200,169,110,.85)';});
+  el.addEventListener('mouseleave',()=>{r$.style.width='36px';r$.style.height='36px';r$.style.borderColor='rgba(200,169,110,.4)';});
 });
 
-// NAVBAR + PARALLAX
+// ── NAVBAR SCROLL + PARALLAX ───────────────────────────────
 window.addEventListener('scroll',()=>{
-  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>80);
-  const hb=document.getElementById('heroBg');
-  if(hb&&window.scrollY<window.innerHeight) hb.style.transform=`translateY(${window.scrollY*0.38}px)`;
+  document.getElementById('nav').classList.toggle('sc',window.scrollY>70);
+  const h=document.getElementById('heroBg');
+  if(h&&window.scrollY<window.innerHeight)h.style.transform=`translateY(${window.scrollY*.36}px)`;
 });
 
-// SCROLL REVEAL
-const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');}),{threshold:0.08});
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+// ── REVEAL ─────────────────────────────────────────────────
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vis');}),{threshold:.07});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
 
-// LOADER
+// ── QR GENERATOR ───────────────────────────────────────────
+function mkQR(el,seed,size){
+  const M=size>100?25:21,ms=Math.floor(size/M);
+  const cv=document.createElement('canvas');cv.width=cv.height=size;
+  const ctx=cv.getContext('2d');
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,size,size);
+  const fp=(x,y)=>{ctx.fillStyle='#000';ctx.fillRect(x*ms,y*ms,7*ms,7*ms);ctx.fillStyle='#fff';ctx.fillRect((x+1)*ms,(y+1)*ms,5*ms,5*ms);ctx.fillStyle='#000';ctx.fillRect((x+2)*ms,(y+2)*ms,3*ms,3*ms);};
+  fp(0,0);fp(M-7,0);fp(0,M-7);
+  ctx.fillStyle='#000';
+  for(let r=0;r<M;r++)for(let c=0;c<M;c++){
+    if((r<9&&c<9)||(r<9&&c>M-9)||(r>M-9&&c<9))continue;
+    if(((seed*(r*37+c*23+13))%100)>47)ctx.fillRect(c*ms,r*ms,ms,ms);
+  }
+  el.appendChild(cv);
+}
+
+// ── LOADER ─────────────────────────────────────────────────
 window.addEventListener('load',()=>{
   setTimeout(()=>{
-    document.getElementById('loader').classList.add('hidden');  },1900);
+    document.getElementById('loader').classList.add('hide');
+    [0,1,2,3,4,5].forEach(i=>{const el=document.getElementById('qr'+i);if(el)mkQR(el,i*137+42,56);});
+    const bq=document.getElementById('bigQR');if(bq)mkQR(bq,999,136);
+  },2000);
 });
 
 setLang('es');
 </script>
 </body>
+</html>
